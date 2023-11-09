@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "univ.soongsil.undercover"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "univ.soongsil.undercover"
@@ -25,6 +25,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    viewBinding {
+        enable = true
     }
 }
 
