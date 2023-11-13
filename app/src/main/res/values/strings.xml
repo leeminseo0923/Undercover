@@ -8,4 +8,6 @@
     <string name="name_hint">홍길동</string>
     <string name="login_button_string">로그인</string>
     <string name="register_button_string">회원가입</string>
+    <string name="top_label">top label</string>
+    <string name="bottom_label">bottom label</string>
 </resources>
