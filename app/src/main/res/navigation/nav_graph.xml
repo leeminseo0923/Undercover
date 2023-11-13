@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/freindsPageActivity">
+    <activity
+        android:id="@+id/freindsPageActivity"
+        android:name="univ.soongsil.undercover.FreindsPageActivity"
+        android:label="activity_freinds_page"
+        tools:layout="@layout/activity_freinds_page" />
+    <activity
+        android:id="@+id/addFreindsActivity"
+        android:name="univ.soongsil.undercover.AddFreindsActivity"
+        android:label="activity_add_freinds"
+        tools:layout="@layout/activity_add_freinds" />
+    <activity
+        android:id="@+id/settingActvity"
+        android:name="univ.soongsil.undercover.SettingActvity"
+        android:label="activity_setting_actvity"
+        tools:layout="@layout/activity_setting_actvity" />
+    <activity
+        android:id="@+id/mainPageActivity"
+        android:name="univ.soongsil.undercover.MainPageActivity"
+        android:label="activity_main_page"
+        tools:layout="@layout/activity_main_page" />
+</navigation>
+
