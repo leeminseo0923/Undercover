@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDA286"
+    tools:context=".StartPageActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="궁금해지는 여행,\nUNDER COVER"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"/>
+
+
+
+</LinearLayout>
