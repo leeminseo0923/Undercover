@@ -11,6 +11,11 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import univ.soongsil.undercover.fragment.Fragment1;
+import univ.soongsil.undercover.fragment.Fragment2;
+import univ.soongsil.undercover.fragment.Fragment3;
+import univ.soongsil.undercover.fragment.Fragment4;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
