@@ -2,33 +2,36 @@ package univ.soongsil.undercover;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import univ.soongsil.undercover.databinding.ActivityLoginPageBinding;
+import univ.soongsil.undercover.databinding.ActivityLoginBinding;
 
-public class LoginPage extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
-    private ActivityLoginPageBinding binding;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityLoginPageBinding.inflate(getLayoutInflater());
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginPage.this, "로그인 버튼 클릭", Toast.LENGTH_SHORT).show();
+                // TODO: 실제 로그인 구현
+                Toast.makeText(LoginActivity.this, "로그인 버튼 클릭", Toast.LENGTH_SHORT).show();
             }
         });
 
         binding.registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginPage.this, "회원가입 버튼 클릭", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         });
     }
