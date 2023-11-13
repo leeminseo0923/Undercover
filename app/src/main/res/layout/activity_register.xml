@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    >
+
+
+    <LinearLayout
+        android:id="@+id/email_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:fontFamily="@font/roboto_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:textColor="@color/main_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:fontFamily="@font/roboto_bold"
+            android:id="@+id/email_edit_text"
+            android:layout_width="258dp"
+            android:textSize="24sp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:backgroundTint="@color/main_color"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
+            android:textColorHint="#808080" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/password_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:fontFamily="@font/roboto_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textColor="@color/main_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:fontFamily="@font/roboto_bold"
+            android:id="@+id/password_edit_text"
+            android:layout_width="258dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:backgroundTint="@color/main_color"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:textSize="24sp"
+            android:autofillHints="password"
+            android:textColorHint="#808080" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="258dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:fontFamily="@font/roboto_bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/name"
+            android:textColor="@color/main_color"
+            android:textSize="14sp" />
+
+        <EditText
+            android:fontFamily="@font/roboto_bold"
+            android:textSize="24sp"
+            android:id="@+id/name_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:backgroundTint="@color/main_color"
+            android:hint="@string/name_hint"
+            android:inputType="textPersonName"
+            android:autofillHints="name"
+            android:textColorHint="#808080" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/register_button"
+        android:layout_width="187dp"
+        android:layout_height="59dp"
+        android:backgroundTint="@color/main_color"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/register_button_string"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:cornerRadius="10dp" />
+
+</LinearLayout>
