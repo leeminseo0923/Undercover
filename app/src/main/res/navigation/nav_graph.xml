@@ -15,10 +15,10 @@
         android:label="activity_add_freinds"
         tools:layout="@layout/activity_add_freinds" />
     <activity
-        android:id="@+id/settingActvity"
-        android:name="univ.soongsil.undercover.SettingActvity"
+        android:id="@+id/settingActivity"
+        android:name="univ.soongsil.undercover.SettingActivity"
         android:label="activity_setting_actvity"
-        tools:layout="@layout/activity_setting_actvity" />
+        tools:layout="@layout/activity_setting" />
     <activity
         android:id="@+id/mainPageActivity"
         android:name="univ.soongsil.undercover.MainPageActivity"
