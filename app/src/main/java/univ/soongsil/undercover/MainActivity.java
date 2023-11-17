@@ -11,10 +11,10 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import univ.soongsil.undercover.fragment.Fragment1;
-import univ.soongsil.undercover.fragment.Fragment2;
-import univ.soongsil.undercover.fragment.Fragment3;
-import univ.soongsil.undercover.fragment.Fragment4;
+import univ.soongsil.undercover.fragment.MainPageFragment;
+import univ.soongsil.undercover.fragment.FriendsPageFragment;
+import univ.soongsil.undercover.fragment.AddFriendsFragment;
+import univ.soongsil.undercover.fragment.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,22 +34,22 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView = findViewById(R.id.navbar);
         //첫 화면
-        getSupportFragmentManager().beginTransaction().add(R.id.main_frame, new Fragment1()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_frame, new MainPageFragment()).commit();
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.home) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new Fragment1()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
                 }
                 else if(item.getItemId() == R.id.friend) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new Fragment2()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FriendsPageFragment()).commit();
                 }
                 else if(item.getItemId() == R.id.addfriend){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new Fragment3()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new AddFriendsFragment()).commit();
                 }
                 else if(item.getItemId() == R.id.setting){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new Fragment4()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit();
                 }
                 return true;
             }

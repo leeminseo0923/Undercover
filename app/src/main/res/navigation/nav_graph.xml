@@ -3,21 +3,21 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/freindsPageActivity">
+    app:startDestination="@id/friendsPageActivity">
     <activity
-        android:id="@+id/freindsPageActivity"
-        android:name="univ.soongsil.undercover.FreindsPageActivity"
-        android:label="activity_freinds_page"
-        tools:layout="@layout/activity_freinds_page" />
+        android:id="@+id/friendsPageActivity"
+        android:name="univ.soongsil.undercover.FriendsPageActivity"
+        android:label="activity_friends_page"
+        tools:layout="@layout/activity_friends_page" />
     <activity
-        android:id="@+id/addFreindsActivity"
-        android:name="univ.soongsil.undercover.AddFreindsActivity"
-        android:label="activity_add_freinds"
-        tools:layout="@layout/activity_add_freinds" />
+        android:id="@+id/addFriendsActivity"
+        android:name="univ.soongsil.undercover.AddFriendsActivity"
+        android:label="activity_add_friends"
+        tools:layout="@layout/activity_add_friends" />
     <activity
         android:id="@+id/settingActivity"
         android:name="univ.soongsil.undercover.SettingActivity"
-        android:label="activity_setting_actvity"
+        android:label="activity_setting"
         tools:layout="@layout/activity_setting" />
     <activity
         android:id="@+id/mainPageActivity"

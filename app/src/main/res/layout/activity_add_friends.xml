@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FreindsPageActivity">
+    tools:context=".AddFriendsActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="friends"
+        android:text="add friends"
         android:textSize="100dp"
         />
 

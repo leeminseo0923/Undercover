@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "EmailPassword";
     private FirebaseAuth mAuth;
-    private ActivityLoginBinding binding;
+    ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,15 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (binding.emailEditText.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (binding.passwordEditText.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 String email = binding.emailEditText.getText().toString();
                 String password = binding.passwordEditText.getText().toString();
 
@@ -51,16 +60,18 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    /** 로그인 확인을 위해 onStart() 주석 처리 */
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        // Check if user is signed in (non-null) and update UI accordingly.
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if (currentUser != null) {
-//            updateUI(currentUser);
-//        }
-//    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            updateUI(currentUser);
+        }
+
+        binding.emailEditText.setText("");
+        binding.passwordEditText.setText("");
+    }
 
     private void initFirebaseAuth() {
         // Initialize Firebase Auth
@@ -76,17 +87,14 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(null);
+                            updateUI(user);
 
                             /** 로그인 확인용 임시 토스트 메시지 */
-                            Toast.makeText(LoginActivity.this, user.getEmail() + "로 로그인 되었습니다.", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(LoginActivity.this, user.getEmail() + " 로그인", Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Log.d(TAG, "signInWithEmail:failure");
-                            Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "이메일 또는 비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
                     }
@@ -96,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         if (user != null) {
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("USER_PROFILE", "email: " + user.getEmail() + "\n" + "uid: " + user.getUid());
+            intent.putExtra("USER_PROFILE", user.getEmail());
 
             startActivity(intent);
         }
