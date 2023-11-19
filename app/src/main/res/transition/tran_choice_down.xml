@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:transitionOrdering="together">
+
+    <changeBounds
+        android:duration="700"
+        android:interpolator="@android:interpolator/linear_out_slow_in">
+        <targets>
+            <target android:targetId="@id/choice_down" />
+        </targets>
+    </changeBounds>
+
+    <fade
+        android:duration="700"
+        android:fadingMode="fade_out"
+        android:interpolator="@android:interpolator/linear">
+        <targets>
+            <target android:targetId="@id/choice_up" />
+            <target android:targetId="@id/balance_game_title" />
+        </targets>
+    </fade>
+
+</transitionSet>
