@@ -29,8 +29,7 @@
             android:background="#123456"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:onClick="clickChoiceUp"
-            android:text="산"
+            android:text="option_array_up item이 들어갑니다."
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
@@ -54,8 +53,7 @@
             android:background="#123456"
             android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:onClick="clickChoiceDown"
-            android:text="바다"
+            android:text="option_array_down item이 들어갑니다."
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
