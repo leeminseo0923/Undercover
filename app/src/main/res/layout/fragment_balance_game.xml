@@ -1,62 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/balance_game_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_color">
+    android:background="@color/main_color"
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/balance_game_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="여행ver 밸런스게임"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/choice_up"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/choice_up_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/balance_game_title"
-            android:layout_width="match_parent"
+            android:id="@+id/choice_up_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/roboto_bold"
-            android:text="여행ver 밸런스게임"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/choice_up"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#123456"
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:text="option_array_up item이 들어갑니다."
+            android:text="위 선택지"
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/versus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:gravity="center"
+        android:text="VS"
+        android:textColor="@color/white"
+        android:textSize="45sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/choice_down"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/choice_down_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/versus"
-            android:layout_width="match_parent"
+            android:id="@+id/choice_down_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:text="VS"
+            android:text="아래 선택지"
             android:textColor="@color/white"
             android:textSize="50sp"
             android:textStyle="bold" />
+    </RelativeLayout>
 
-        <TextView
-            android:id="@+id/choice_down"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#123456"
-            android:fontFamily="@font/roboto_bold"
-            android:gravity="center"
-            android:text="option_array_down item이 들어갑니다."
-            android:textColor="@color/white"
-            android:textSize="50sp"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>
