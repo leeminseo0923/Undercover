@@ -49,7 +49,7 @@ public class BalanceGameFragment extends Fragment {
 
         // TODO: 사진 다 찾으면 사진 파일 이름 수정
         binding.choiceUpImage.setImageResource(R.drawable.choice_mountain);
-        binding.choiceDownImage.setImageResource(R.drawable.choice_mountain);
+        binding.choiceDownImage.setImageResource(R.drawable.choice_beach);
 
         binding.choiceUpText.setText(arrayUp[count]);
         binding.choiceDownText.setText(arrayDown[count]);
