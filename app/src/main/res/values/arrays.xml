@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="option_array_up">
+        <item>산</item>
+        <item>휴식</item>
+        <item>대중교통</item>
+        <item>찾아가는 맛집</item>
+        <item>쇼핑 선호</item>
+    </string-array>
+
+    <string-array name="option_array_down">
+        <item>바다</item>
+        <item>액티비티</item>
+        <item>뚜벅이</item>
+        <item>가까운 맛집</item>
+        <item>쇼핑 비선호</item>
+    </string-array>
+</resources>
