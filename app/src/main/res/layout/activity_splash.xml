@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FDA286"
-    tools:context=".StartPageActivity">
+    tools:context=".SplashActivity">
 
     <TextView
         android:layout_width="match_parent"
