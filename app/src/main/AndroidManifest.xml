@@ -13,19 +13,25 @@
         android:theme="@style/Theme.Undercover"
         tools:targetApi="31">
         <activity
-            android:name=".StartPageActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true" />
         <activity
-            android:name=".StartActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".RegisterActivity"
@@ -34,9 +40,6 @@
             android:name=".BalanceGameActivity"
             android:exported="true">
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="true" />
         <activity
             android:name=".MainPageActivity"
             android:exported="false" />

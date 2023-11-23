@@ -103,10 +103,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if (user != null) {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("USER_PROFILE", user.getEmail());
-
-            startActivity(intent);
+            finish();
         }
     }
 }
