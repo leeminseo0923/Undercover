@@ -23,6 +23,19 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "EmailPassword";
     private FirebaseAuth mAuth;
     ActivityLoginBinding binding;
+    private long prevBackTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - prevBackTime <= 2000) {
+                moveTaskToBack(true);
+            }
+            prevBackTime = System.currentTimeMillis();
+            return true;
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
