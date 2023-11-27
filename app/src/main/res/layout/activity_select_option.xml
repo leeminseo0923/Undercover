@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <ImageButton
+        android:id="@+id/backbutton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/baseline_arrow_back_24"
+        android:contentDescription="backbutton"
+        android:backgroundTint="#00000000"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="여행지를\n선택해주세요!"
+        android:textSize="40dp"
+        android:textColor="@color/main_color"
+        android:textStyle="bold"
+        android:layout_marginTop="85dp"
+        android:layout_marginLeft="20dp"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spn_SPNList"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:paddingRight="30dp"
+        android:popupBackground="#2540FF"
+        android:spinnerMode="dropdown">
+
+
+    </androidx.appcompat.widget.AppCompatSpinner>
+
+
+</LinearLayout>
