@@ -7,13 +7,45 @@ import java.util.List;
 import java.util.Objects;
 
 public class User {
+    private final String email;
     private final String name;
     private final List<String> friends;
     private List<Boolean> options;
-    public User(String name) {
+    private List<String> friendRequests;
+    public User(String name, String email) {
+        this.email = email;
         this.name = name;
+        friendRequests = new ArrayList<>();
         friends = new ArrayList<>();
-        options = new ArrayList<>(10);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getFriends() {
+        return friends;
+    }
+
+    public List<Boolean> getOptions() {
+        return options;
+    }
+
+    public List<String> getFriendRequests() {
+        return friendRequests;
+    }
+
+    public User addFriendRequest(String uID) {
+        friendRequests.add(uID);
+        return this;
+    }
+
+    public void setFriendRequests(List<String> friendRequests) {
+        this.friendRequests = friendRequests;
     }
 
     public User addFriend(String uID) {
@@ -37,6 +69,7 @@ public class User {
     }
 
     public void setOptions(List<Boolean> options) {
+        if (options.size() != 10) throw new IllegalArgumentException("option 은 10개여야 합니다.");
         this.options = options;
     }
 
