@@ -43,7 +43,8 @@ public class SettingFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), userProfile + " 로그아웃", Toast.LENGTH_SHORT).show();
 
                 signOut();
-                getActivity().finish();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                getActivity().startActivity(intent);
             }
         });
     }
