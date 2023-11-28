@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 import univ.soongsil.undercover.LoginActivity;
+import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivitySettingBinding;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
@@ -35,6 +37,13 @@ public class SettingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        binding.editInformationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager.beginTransaction().replace(R.id.main_frame, new EditInfoFragment()).commit();
+            }
+        });
 
         binding.logoutButton.setOnClickListener(v -> {
             signOut();

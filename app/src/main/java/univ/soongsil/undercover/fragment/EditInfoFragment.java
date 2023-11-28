@@ -1,66 +1,165 @@
 package univ.soongsil.undercover.fragment;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import univ.soongsil.undercover.LoginActivity;
 import univ.soongsil.undercover.R;
+import univ.soongsil.undercover.databinding.FragmentEditInfoBinding;
+import univ.soongsil.undercover.domain.UpdateUI;
+import univ.soongsil.undercover.repository.UserRepository;
+import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditInfoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditInfoFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public EditInfoFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditInfoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditInfoFragment newInstance(String param1, String param2) {
-        EditInfoFragment fragment = new EditInfoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private static final String TAG = "UserInfo";
+    FragmentEditInfoBinding binding;
+    UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_info, container, false);
+        binding = FragmentEditInfoBinding.inflate(inflater);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        FirebaseUser user = userRepository.getCurrentUser();
+        String userEmail = user.getEmail();
+        binding.userEmail.setText(userEmail);
+
+        binding.newPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String confirmPassword = binding.confirmPassword.getText().toString();
+
+                if (confirmPassword.equals("")) {
+                    binding.passwordMatch.setText("");
+                } else if (s.toString().equals(confirmPassword)) {
+                    binding.passwordMatch.setText("새 비밀번호와 일치합니다.");
+                    binding.passwordMatch.setTextColor(Color.parseColor("#0AAC50")); // green
+                } else {
+                    binding.passwordMatch.setText("새 비밀번호와 일치하지 않습니다.");
+                    binding.passwordMatch.setTextColor(Color.parseColor("#F44039")); // red
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        binding.confirmPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String newPassword = binding.newPassword.getText().toString();
+
+                if (s.toString().equals("")) {
+                    binding.passwordMatch.setText("");
+                } else if (s.toString().equals(newPassword)) {
+                    binding.passwordMatch.setText("새 비밀번호와 일치합니다.");
+                    binding.passwordMatch.setTextColor(Color.parseColor("#0AAC50")); // green
+                } else {
+                    binding.passwordMatch.setText("새 비밀번호와 일치하지 않습니다.");
+                    binding.passwordMatch.setTextColor(Color.parseColor("#F44039")); // red
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        binding.editCompleteButton.setOnClickListener(v -> {
+            String currentPassword = binding.currentPassword.getText().toString();
+            String newPassword = binding.newPassword.getText().toString();
+            String confirmPassword = binding.confirmPassword.getText().toString();
+
+            if (currentPassword.equals("")) {
+                makeToast("현재 비밀번호를 입력해주세요.");
+                return;
+            } else if (newPassword.equals("")) {
+                makeToast("새 비밀번호를 입력해주세요.");
+                return;
+            } else if (confirmPassword.equals("")) {
+                makeToast("새 비밀번호를 한 번 더 입력해주세요.");
+                return;
+            }
+
+            if (!newPassword.equals(confirmPassword)) {
+                makeToast("새 비밀번호와 일치하지 않습니다.");
+                return;
+            }
+
+            // 기존 비밀번호 확인을 위해 기존 비밀번호로 로그인 실행
+            userRepository.login(userEmail, currentPassword, new UpdateUI<FirebaseUser>() {
+                @Override
+                public void onSuccess(FirebaseUser result) {
+                    FirebaseUser user = userRepository.getCurrentUser();
+                    if (currentPassword.equals(newPassword)) {
+                        makeToast("현재 비밀번호와 새 비밀번호가 일치하여 수정할 수 없습니다.");
+                        return;
+                    }
+
+                    user.updatePassword(newPassword)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "User password updated.");
+                                    makeToast("비밀번호가 변경되었습니다.\n로그아웃합니다.");
+
+                                    userRepository.signOut();
+                                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                                    assert getActivity() != null;
+                                    getActivity().startActivity(intent);
+                                }
+                            });
+                }
+
+                @Override
+                public void onFail() {
+                    Toast.makeText(getActivity().getApplicationContext(), "현재 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    public void makeToast(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
