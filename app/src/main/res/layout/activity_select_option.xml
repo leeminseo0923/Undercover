@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
 
 
 
@@ -17,26 +19,41 @@
         />
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="여행지를\n선택해주세요!"
-        android:textSize="40dp"
-        android:textColor="@color/main_color"
-        android:textStyle="bold"
-        android:layout_marginTop="85dp"
-        android:layout_marginLeft="20dp"/>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="220dp"
+        android:layout_gravity="center">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spn_SPNList"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:paddingRight="30dp"
-        android:popupBackground="#2540FF"
-        android:spinnerMode="dropdown">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:text="여행지를\n선택해주세요!"
+            android:textColor="@color/main_color"
+            android:textSize="40dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center">
+
+        <Spinner
+            android:id="@+id/spn_SPNList"
+            android:background="@drawable/spinner_background"
+            android:layout_width="340dp"
+            android:layout_height="50dp"
+            android:paddingRight="30dp"
+            android:popupBackground="#2540FF"
+            android:spinnerMode="dialog"
+            android:theme="@style/SpinnerTheme">
+
+        </Spinner>
+
+    </LinearLayout>
 
 
-    </androidx.appcompat.widget.AppCompatSpinner>
 
 
 </LinearLayout>

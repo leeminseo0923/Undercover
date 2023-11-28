@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivityMainPageBinding;
@@ -38,6 +39,8 @@ public class MainPageFragment extends Fragment {
                 getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new SelectOptionFragment()).commit();
             }
         });
+
+
     }
 
 }
