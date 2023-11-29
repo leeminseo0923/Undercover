@@ -34,7 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         binding.registerButton.setOnClickListener(v -> {
             String email = binding.emailEditText.getText().toString();
@@ -42,20 +41,14 @@ public class RegisterActivity extends AppCompatActivity {
             String username = binding.nameEditText.getText().toString();
 
             User user = new User(username, email);
+            UserRepository userRepository = new UserRepositoryImpl();
 
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
 
-                            FirebaseUser currentUser = auth.getCurrentUser();
-
-                            db.collection("user").document(currentUser.getUid())
-                                    .set(user)
-                                    .addOnSuccessListener(aVoid ->
-                                            Log.d(TAG, "DocumentSnapshot successfully written!"))
-                                    .addOnFailureListener(e ->
-                                            Log.w(TAG, "Error writing document", e));
+                            userRepository.addUserDocument(userRepository.getCurrentUser().getUid(), user);
 
                             Intent intent = new Intent(RegisterActivity.this, BalanceGameActivity.class);
                             startActivity(intent);
