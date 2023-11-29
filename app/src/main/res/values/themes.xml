@@ -12,9 +12,8 @@
 
     <style name="SpinnerDivideStyle" parent="android:style/Widget.ListView.DropDown">
         <item name="color">#FFFFFF</item>
-        <item name="android:divider">#000000</item> <!-- divider 색 -->
-        <item name="android:dividerHeight">2dp</item> <!-- divider 높이 -->
-        <item name="android:paddingLeft">40dp</item>
+        <item name="android:divider">#3A3737</item> <!-- divider 색 -->
+        <item name="android:dividerHeight">1dp</item> <!-- divider 높이 -->
     </style>
 
     <style name="SpinnerTheme" parent="Base.Theme.Undercover">

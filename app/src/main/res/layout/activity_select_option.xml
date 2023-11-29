@@ -88,8 +88,8 @@
             android:layout_width="340dp"
             android:layout_height="50dp"
             android:paddingRight="30dp"
-            android:popupBackground="#2540FF"
-            android:spinnerMode="dialog"
+            android:popupBackground="@color/white"
+            android:spinnerMode="dropdown"
             android:paddingLeft="15dp"
             android:theme="@style/SpinnerTheme">
         </Spinner>
