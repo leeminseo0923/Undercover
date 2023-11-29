@@ -147,7 +147,7 @@ public class EditInfoFragment extends Fragment {
 
                 @Override
                 public void onFail() {
-                    Toast.makeText(getActivity().getApplicationContext(), "현재 비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                    makeToast("현재 비밀번호가 일치하지 않습니다.");
                 }
             });
         });
