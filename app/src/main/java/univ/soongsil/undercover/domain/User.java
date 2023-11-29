@@ -17,6 +17,7 @@ public class User {
         this.name = name;
         friendRequests = new ArrayList<>();
         friends = new ArrayList<>();
+        options = new ArrayList<>();
     }
 
     public String getEmail() {
@@ -69,7 +70,8 @@ public class User {
     }
 
     public void setOptions(List<Boolean> options) {
-        if (options.size() != 10) throw new IllegalArgumentException("option 은 10개여야 합니다.");
+        // TODO: 개수는 수정 예정
+        if (options.size() != 5) throw new IllegalArgumentException("option은 5개여야 합니다.");
         this.options = options;
     }
 
