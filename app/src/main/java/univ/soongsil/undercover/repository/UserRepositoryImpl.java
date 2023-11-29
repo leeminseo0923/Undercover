@@ -50,10 +50,14 @@ public class UserRepositoryImpl implements UserRepository {
                         updateUI.onSuccess(user);
                     } else {
                         Log.e(COLLECTION, "User not found");
-                        updateUI.onFail();
+//                        updateUI.onFail();
                     }
                 })
                 .addOnFailureListener(e -> {
+                    updateUI.onFail();
+                    // 이 문장이 addOnSuccessListener의 else문 안에가 아니라
+                    // 여기에 와야 정상작동하는 것 같습니다.
+
                     String message = e.getMessage();
                     if (message != null) {
                         Log.e(COLLECTION, message);
@@ -62,6 +66,7 @@ public class UserRepositoryImpl implements UserRepository {
                     }
                 });
     }
+
     @Override
     public void signOut() {
         auth.signOut();
