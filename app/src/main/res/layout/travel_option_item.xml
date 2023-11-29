@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="30dp">
+
+    <!--토글 버튼: 왼쪽 false <-> option_down / 오른쪽 true <-> option_up -->
+    <TextView
+        android:id="@+id/travel_option_down"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:text="아래 선택지"
+        android:textSize="22sp" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/toggle_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:checked="true"
+        android:layout_gravity="center"
+        android:thumb="@drawable/toggle_thumb"
+        app:switchMinWidth="50dp"
+        app:track="@drawable/toggle_selector" />
+
+    <TextView
+        android:id="@+id/travel_option_up"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="end"
+        android:text="위 선택지"
+        android:textSize="22sp" />
+
+</LinearLayout>
