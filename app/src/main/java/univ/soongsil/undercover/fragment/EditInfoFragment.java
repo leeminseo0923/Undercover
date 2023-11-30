@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,22 +16,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import univ.soongsil.undercover.LoginActivity;
-import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.FragmentEditInfoBinding;
 import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 public class EditInfoFragment extends Fragment {
-    private static final String TAG = "UserInfo";
+
+    private static final String TAG = "EDIT_INFO";
     FragmentEditInfoBinding binding;
+
     UserRepository userRepository = new UserRepositoryImpl();
 
     @Override
@@ -46,9 +42,8 @@ public class EditInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FirebaseUser user = userRepository.getCurrentUser();
-        String userEmail = user.getEmail();
-        binding.userEmail.setText(userEmail);
+        String email = userRepository.getCurrentUser().getEmail();
+        binding.userEmail.setText(email);
 
         binding.newPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,7 +117,7 @@ public class EditInfoFragment extends Fragment {
             }
 
             // 기존 비밀번호 확인을 위해 기존 비밀번호로 로그인 실행
-            userRepository.login(userEmail, currentPassword, new UpdateUI<FirebaseUser>() {
+            userRepository.login(email, currentPassword, new UpdateUI<FirebaseUser>() {
                 @Override
                 public void onSuccess(FirebaseUser result) {
                     FirebaseUser user = userRepository.getCurrentUser();
@@ -137,7 +132,7 @@ public class EditInfoFragment extends Fragment {
                                     Log.d(TAG, "User password updated.");
                                     makeToast("비밀번호가 변경되었습니다.\n로그아웃합니다.");
 
-                                    userRepository.signOut();
+                                    userRepository.logout();
                                     Intent intent = new Intent(getContext(), LoginActivity.class);
                                     assert getActivity() != null;
                                     getActivity().startActivity(intent);

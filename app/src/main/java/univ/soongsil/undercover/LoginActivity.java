@@ -16,21 +16,9 @@ import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private UserRepository userRepository;
     ActivityLoginBinding binding;
+    private UserRepository userRepository;
     private long prevBackTime = 0;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (System.currentTimeMillis() - prevBackTime <= 2000) {
-                moveTaskToBack(true);
-            }
-            prevBackTime = System.currentTimeMillis();
-            return true;
-        }
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        initUserRepository();
+        userRepository = new UserRepositoryImpl();
 
         binding.loginButton.setOnClickListener(v -> {
             if (binding.emailEditText.getText().toString().equals("")) {
@@ -53,7 +41,17 @@ public class LoginActivity extends AppCompatActivity {
             String email = binding.emailEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
 
-            signIn(email, password);
+            userRepository.login(email, password, new UpdateUI<FirebaseUser>() {
+                @Override
+                public void onSuccess(FirebaseUser result) {
+                    finish();
+                }
+
+                @Override
+                public void onFail() {
+                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         binding.registerButton.setOnClickListener(v -> {
@@ -65,40 +63,25 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = userRepository.getCurrentUser();
         if (currentUser != null) {
-            updateUI(currentUser);
+            finish();
         }
-
         binding.emailEditText.setText("");
         binding.passwordEditText.setText("");
     }
 
-    private void initUserRepository() {
-        // Initialize User repository
-        userRepository = new UserRepositoryImpl();
-    }
-
-    private void signIn(String email, String password) {
-        userRepository.login(email, password, new UpdateUI<FirebaseUser>() {
-            @Override
-            public void onSuccess(FirebaseUser result) {
-                updateUI(result);
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis() - prevBackTime <= 2000) {
+                moveTaskToBack(true);
             }
-
-            @Override
-            public void onFail() {
-                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
-                updateUI(null);
-            }
-        });
-    }
-
-    private void updateUI(FirebaseUser user) {
-        if (user != null) {
-            finish();
+            prevBackTime = System.currentTimeMillis();
+            return true;
         }
+        return false;
     }
 }
 

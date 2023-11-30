@@ -2,12 +2,24 @@ package univ.soongsil.undercover.repository;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.domain.User;
+import univ.soongsil.undercover.fragment.TravelOptionFragment;
 
 public class UserRepositoryImpl implements UserRepository {
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -32,10 +44,11 @@ public class UserRepositoryImpl implements UserRepository {
                 })
                 .addOnFailureListener(e -> {
                     String message = e.getMessage();
-                    if (message != null)
+                    if (message != null) {
                         Log.e(COLLECTION, message);
-                    else
+                    } else {
                         Log.e(COLLECTION, "Register is failed");
+                    }
                     updateUI.onFail();
                 });
     }
@@ -50,26 +63,27 @@ public class UserRepositoryImpl implements UserRepository {
                         updateUI.onSuccess(user);
                     } else {
                         Log.e(COLLECTION, "User not found");
-//                        updateUI.onFail();
+                        updateUI.onFail();
                     }
                 })
                 .addOnFailureListener(e -> {
-                    updateUI.onFail();
-                    // 이 문장이 addOnSuccessListener의 else문 안에가 아니라
-                    // 여기에 와야 정상작동하는 것 같습니다.
-
                     String message = e.getMessage();
                     if (message != null) {
                         Log.e(COLLECTION, message);
                     } else {
                         Log.e(COLLECTION, "Login is failed");
                     }
+                    updateUI.onFail();
                 });
     }
 
     @Override
-    public void signOut() {
+    public void logout() {
         auth.signOut();
+        if (auth.getCurrentUser() == null)
+            Log.d(COLLECTION, "User logout is successful");
+        else
+            Log.d(COLLECTION, "Logout is failed");
     }
 
     @Override
@@ -78,12 +92,45 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void addUserDocument(String uID, User user) {
+    public void setUserDocument(String uID, User user) {
         repository.collection(COLLECTION)
                 .document(uID)
                 .set(user)
                 .addOnSuccessListener(
                         z -> Log.d(COLLECTION, "Success to add document")
                 );
+    }
+
+    @Override
+    public void updateUserOptions(String uID, List<Boolean> options) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("options", options)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
+    }
+
+    @Override
+    public void updateUserFriends(String uID, List<String> friends) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("friends", friends)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
+    }
+
+    @Override
+    public void updateUserFriendRequests(String uID, List<String> friendRequests) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("friendRequests", friendRequests)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
     }
 }
