@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="HistoryBar">
+        <attr name="historyDrawable" format="reference" />
+        <attr name="markerDrawable" format="reference" />
+        <attr name="orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="barThickness" format="dimension" />
+        <attr name="progress" format="integer" />
+        <attr name="markerRadius" format="dimension" />
+        <attr name="previousTextColor" format="color" />
+        <attr name="currentTextColor" format="color" />
+        <attr name="futureTextColor" format="color" />
+        <attr name="textOffset" format="dimension" />
+        <attr name="textFont" format="reference" />
+    </declare-styleable>
+</resources>
