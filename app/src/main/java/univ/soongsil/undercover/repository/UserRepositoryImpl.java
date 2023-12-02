@@ -2,24 +2,15 @@ package univ.soongsil.undercover.repository;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.domain.User;
-import univ.soongsil.undercover.fragment.TravelOptionFragment;
 
 public class UserRepositoryImpl implements UserRepository {
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -113,10 +104,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserFriends(String uID, List<String> friends) {
+    public void addUserFriend(String uID, String friendUid) {
         repository.collection(COLLECTION)
                 .document(uID)
-                .update("friends", friends)
+                .update("friends", FieldValue.arrayUnion(friendUid))
                 .addOnSuccessListener(aVoid ->
                         Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
                 .addOnFailureListener(e ->
@@ -124,12 +115,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void updateUserFriendRequests(String uID, List<String> friendRequests) {
+    public void deleteUserFriendRequest(String uID, String friendUid) {
         repository.collection(COLLECTION)
                 .document(uID)
-                .update("friendRequests", friendRequests)
-                .addOnSuccessListener(aVoid ->
-                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .update("friendRequests", FieldValue.arrayRemove(friendUid))
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(COLLECTION, "DocumentSnapshot successfully updated!");
+                })
                 .addOnFailureListener(e ->
                         Log.w(COLLECTION, "Error updating document", e));
     }

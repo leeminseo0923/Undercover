@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="main_color">#FDA286</color>
     <color name="grey">#808080</color>
+    <color name="red">#F44039</color>
+    <color name="green">#0AAC50</color>
 </resources>
