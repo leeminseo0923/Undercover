@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import univ.soongsil.undercover.R;
@@ -37,6 +38,7 @@ public class HistoryBar extends ProgressBar {
     private Paint mCurrentTextPaint;
     private Paint mFutureTextPaint;
     private int mTextOffset;
+    private int mLongestTextWidth;
 
     /**
      * Simple constructor to use when creating a view from code.
@@ -177,6 +179,7 @@ public class HistoryBar extends ProgressBar {
         mHistories = new ArrayList<>(List.of(25, 50, 75));
         mCurrentIndex = 1;
         mTexts = new ArrayList<>(List.of("한글 1", "Sample 2", "Sample 3"));
+        mLongestTextWidth = (int) mCurrentTextPaint.measureText(mTexts.stream().max(Comparator.comparingInt(String::length)).orElse(""));
         setProgress(mHistories.get(mCurrentIndex+1));
 
         setIndeterminate(false);
@@ -200,6 +203,7 @@ public class HistoryBar extends ProgressBar {
     public void setHistories(List<String> labels, List<Integer> progresses) {
         mTexts = labels;
         mHistories = progresses;
+        mLongestTextWidth = (int) mCurrentTextPaint.measureText(mTexts.stream().max(Comparator.comparingInt(String::length)).orElse(""));
         mCurrentIndex = 0;
     }
 
@@ -371,14 +375,13 @@ public class HistoryBar extends ProgressBar {
 
         int barOffset;
         int markerOffset;
-        markerOffset = getWidth() / 2 - mMarkerRadius;
-        barOffset = getWidth() / 2 - barWidth / 2;
+        markerOffset = 0;
+        barOffset = (markerHeight - barWidth) / 2;
 
-        int barTopOffset = (markerHeight - barWidth) / 2;
 
         if (bar != null) {
-            final int barHeight = height - getPaddingTop() - getPaddingBottom() - barTopOffset * 2;
-            bar.setBounds(barOffset, barTopOffset, barOffset + barWidth, barTopOffset + barHeight);
+            final int barHeight = height - getPaddingTop() - getPaddingBottom() - barOffset * 2;
+            bar.setBounds(barOffset, barOffset, barOffset + barWidth, barOffset + barHeight);
         }
 
         if (marker != null) {
@@ -442,6 +445,8 @@ public class HistoryBar extends ProgressBar {
         dw = Math.max(dw, mMarkerRadius * 2);
         dh = Math.max(dh, mMarkerRadius * 2);
         dh += (mMarkerRadius * 2 - mBarWidth);
+
+        dw += mLongestTextWidth;
 
 
         dw += getPaddingLeft() + getPaddingRight();

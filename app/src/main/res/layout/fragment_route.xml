@@ -22,7 +22,7 @@
 
     <univ.soongsil.undercover.view.HistoryBar
         android:id="@+id/bar"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:progressDrawable="@drawable/history_bar_vertical"
         app:barThickness="16dp"
