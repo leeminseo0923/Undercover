@@ -28,7 +28,7 @@
                 android:textSize="15sp" />
 
             <EditText
-                android:id="@+id/edit_name"
+                android:id="@+id/friend_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/main_color"
@@ -45,7 +45,7 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/travel_option_button"
+                android:id="@+id/friend_request_button"
                 android:layout_width="230dp"
                 android:layout_height="60dp"
                 android:background="@drawable/button_round"
@@ -59,11 +59,11 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:paddingTop="20dp"
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3" />
+        android:layout_weight="3"
+        android:paddingTop="20dp" />
 
     <Space
         android:layout_width="match_parent"

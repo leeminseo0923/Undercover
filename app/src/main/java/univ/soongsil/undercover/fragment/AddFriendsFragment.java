@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +13,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +77,45 @@ public class AddFriendsFragment extends Fragment {
                         Log.d(TAG, "get failed with ", task.getException());
                     }
                 });
+
+        binding.friendRequestButton.setOnClickListener(v -> {
+            String myUid = userRepository.getCurrentUser().getUid();
+            String myEmail = userRepository.getCurrentUser().getEmail();
+            String friendEmail = binding.friendEmail.getText().toString();
+
+            if (friendEmail.equals("")) {
+                makeToast("이메일을 입력하세요.");
+                return;
+            }
+
+            db.collection("user")
+                    .whereEqualTo("email", friendEmail)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            Log.d(TAG, "User doesn't exist.");
+                            makeToast("존재하지 않는 사용자입니다.");
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            if (document.getData().get("email").equals(myEmail)) {
+                                Log.d(TAG, "Same as current user.");
+                                makeToast("현재 사용자와 동일한 계정입니다.");
+                                return;
+                            }
+
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+                            String friendUid = document.getId();
+
+                            Log.d(TAG, "Friend request complete");
+                            makeToast("친구 요청을 보냈습니다.");
+                            userRepository.addUserFriendRequest(friendUid, myUid);
+                        }
+                    })
+                    .addOnFailureListener(e ->
+                            Log.w(TAG, "Error getting documents: ", e));
+        });
     }
 
     @Override
@@ -133,8 +180,10 @@ public class AddFriendsFragment extends Fragment {
             holder.binding.acceptButton.setOnClickListener(v -> {
                 String docId = userRepository.getCurrentUser().getUid();
                 String friendUid = holder.binding.friendUid.getText().toString();
-                userRepository.addUserFriend(docId, friendUid);
+
                 userRepository.deleteUserFriendRequest(docId, friendUid);
+                userRepository.addUserFriend(docId, friendUid);
+                userRepository.addUserFriend(friendUid, docId);
 
                 friendRequests.remove(holder.getAdapterPosition());
                 notifyDataSetChanged();
@@ -143,6 +192,7 @@ public class AddFriendsFragment extends Fragment {
             holder.binding.declineButton.setOnClickListener(v -> {
                 String docId = userRepository.getCurrentUser().getUid();
                 String friendUid = holder.binding.friendUid.getText().toString();
+
                 userRepository.deleteUserFriendRequest(docId, friendUid);
 
                 friendRequests.remove(holder.getAdapterPosition());
@@ -154,5 +204,9 @@ public class AddFriendsFragment extends Fragment {
         public int getItemCount() {
             return list.size();
         }
+    }
+
+    public void makeToast(String message) {
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

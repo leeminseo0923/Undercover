@@ -15,5 +15,7 @@ public interface UserRepository {
     void setUserDocument(String uID, User user);
     void updateUserOptions(String uID, List<Boolean> options);
     void addUserFriend(String uID, String friendUid);
+    void deleteUserFriend(String uID, String friendUid);
+    void addUserFriendRequest(String friendUid, String uID);
     void deleteUserFriendRequest(String uID, String friendUid);
 }
