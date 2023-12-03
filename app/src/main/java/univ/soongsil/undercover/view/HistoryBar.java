@@ -1,5 +1,6 @@
 package univ.soongsil.undercover.view;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -10,7 +11,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.FloatProperty;
+import android.util.Log;
 import android.util.TypedValue;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -24,13 +28,10 @@ import java.util.List;
 import univ.soongsil.undercover.R;
 
 public class HistoryBar extends ProgressBar {
-    private List<Integer> mHistories;
-    private List<String> mTexts;
-    private boolean mOrientation;
-    private Drawable mCurrentMarker;
-    private Drawable mPreviousMarker;
-    private Drawable mFutureMarker;
-    private int mMarkerOffset;
+    private List<Integer> mProgresses;
+    private List<String> mHistories;
+    private List<Drawable> mMarkers;
+    private Drawable mMarker;
     private int mBarWidth;
     private int mCurrentIndex;
     private int mMarkerRadius;
@@ -39,6 +40,7 @@ public class HistoryBar extends ProgressBar {
     private Paint mFutureTextPaint;
     private int mTextOffset;
     private int mLongestTextWidth;
+    private int mHistorySize;
 
     /**
      * Simple constructor to use when creating a view from code.
@@ -135,9 +137,7 @@ public class HistoryBar extends ProgressBar {
                 0, 0);
 
         try {
-            mOrientation = a.getBoolean(R.styleable.HistoryBar_orientation, false);
-            Drawable marker = a.getDrawable(R.styleable.HistoryBar_markerDrawable);
-            setMarkers(marker);
+            mMarker = a.getDrawable(R.styleable.HistoryBar_markerDrawable);
 
             int initialBarWidthDP = 16;
             int initialMarkerRadiusDP = 12;
@@ -156,7 +156,18 @@ public class HistoryBar extends ProgressBar {
         } finally {
             a.recycle();
         }
+        setInitialMarker();
 
+    }
+
+    private void setInitialMarker() {
+        mMarkers = new ArrayList<>();
+        for (int i = 0; i < mHistorySize; i++) {
+            if (mMarker != null && mMarker.getConstantState() != null) {
+                Drawable marker = mMarker.getConstantState().newDrawable();
+                mMarkers.add(marker);
+            }
+        }
     }
 
     private void setFont(int id) {
@@ -172,21 +183,21 @@ public class HistoryBar extends ProgressBar {
         mCurrentTextPaint = new Paint();
         mFutureTextPaint = new Paint();
 
-        mPrevTextPaint.setTextSize(spToPx(14, metrics));
-        mCurrentTextPaint.setTextSize(spToPx(14, metrics));
-        mFutureTextPaint.setTextSize(spToPx(14, metrics));
+        mPrevTextPaint.setTextSize(spToPx(metrics));
+        mCurrentTextPaint.setTextSize(spToPx(metrics));
+        mFutureTextPaint.setTextSize(spToPx(metrics));
 
-        mHistories = new ArrayList<>(List.of(25, 50, 75));
+        List<Integer> progress = new ArrayList<>(List.of(0, 50, 90, 100));
+        List<String> history = new ArrayList<>(List.of("한글 1", "Sample 2", "Sample 3", "Sample 4"));
+        setHistories(history, progress);
         mCurrentIndex = 1;
-        mTexts = new ArrayList<>(List.of("한글 1", "Sample 2", "Sample 3"));
-        mLongestTextWidth = (int) mCurrentTextPaint.measureText(mTexts.stream().max(Comparator.comparingInt(String::length)).orElse(""));
-        setProgress(mHistories.get(mCurrentIndex+1));
+        setProgress(mProgresses.get(mCurrentIndex + 1));
 
         setIndeterminate(false);
     }
 
-    private int spToPx(float sp, DisplayMetrics metrics) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics);
+    private int spToPx(DisplayMetrics metrics) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, (float) 14, metrics);
     }
 
     private int dpToPx(int dp, DisplayMetrics metrics) {
@@ -194,143 +205,81 @@ public class HistoryBar extends ProgressBar {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        updateMarkerAndTrackPos(w, h, mFutureMarker, getScale(mCurrentIndex+1));
-        updateMarkerAndTrackPos(w, h, mPreviousMarker, 0);
-        updateMarkerAndTrackPos(w, h, mCurrentMarker, getScale(mCurrentIndex));
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        updateTrackPosVertical(h);
+        if (mMarkers != null) {
+            for (int i = 0; i < mMarkers.size(); i++) {
+                setMarkerPosV(h, mMarkers.get(i), getScale(i));
+            }
+        }
     }
 
     public void setHistories(List<String> labels, List<Integer> progresses) {
-        mTexts = labels;
-        mHistories = progresses;
-        mLongestTextWidth = (int) mCurrentTextPaint.measureText(mTexts.stream().max(Comparator.comparingInt(String::length)).orElse(""));
+        mHistories = labels;
+        mProgresses = progresses;
+        mLongestTextWidth = (int) mCurrentTextPaint.measureText(
+                mHistories.stream().max(Comparator.comparingInt(String::length)).orElse("")
+        );
         mCurrentIndex = 0;
+        mHistorySize = mHistories.size();
+        if (mCurrentIndex + 1 < mProgresses.size())
+            setProgress(mProgresses.get(mCurrentIndex + 1), true);
+        else
+            setProgress(mProgresses.get(mCurrentIndex), true);
+
+        if (mMarker != null) {
+            setInitialMarker();
+        }
     }
 
     public void addHistory(String label, Integer progress) {
-        if (mTexts == null) mTexts = new ArrayList<>();
         if (mHistories == null) mHistories = new ArrayList<>();
-        mTexts.add(label);
-        mHistories.add(progress);
+        if (mProgresses == null) mProgresses = new ArrayList<>();
+        mHistories.add(label);
+        mProgresses.add(progress);
     }
 
     public void addHistory(String label, Integer progress, Integer index) {
-        mTexts.add(index, label);
-        mHistories.add(index, progress);
+        mHistories.add(index, label);
+        mProgresses.add(index, progress);
     }
 
     public void clearHistories() {
-        mTexts = new ArrayList<>();
         mHistories = new ArrayList<>();
+        mProgresses = new ArrayList<>();
     }
 
     public void next() {
-        mCurrentIndex++;
-        setProgress(mHistories.get(mCurrentIndex+1));
-    }
-
-    private void setMarkers(Drawable marker) {
-        if (marker != null) {
-            setFutureMarker(marker.getConstantState().newDrawable());
-            setCurrentMarker(marker.getConstantState().newDrawable());
-            setPreviousMarker(marker.getConstantState().newDrawable());
+        if (mCurrentIndex + 1 < mHistorySize) {
+            mCurrentIndex++;
         }
-    }
-
-    private void setFutureMarker(Drawable marker) {
-        final boolean needUpdate;
-        needUpdate = setMarker(mFutureMarker, marker);
-        mFutureMarker = marker;
+        if (mCurrentIndex + 1 < mHistorySize) {
+            setProgress(mProgresses.get(mCurrentIndex + 1), true);
+        }
         invalidate();
-
-        if (needUpdate) {
-            updateMarkerAndTrackPos(getWidth(), getHeight(), mFutureMarker, Math.min(mCurrentIndex + 1, mHistories.size()));
-            if (marker != null && marker.isStateful()) {
-                int[] state = getDrawableState();
-                marker.setState(state);
-            }
-        }
     }
 
-    private void setCurrentMarker(Drawable marker) {
-        final boolean needUpdate;
-        needUpdate = setMarker(mCurrentMarker, marker);
-        mCurrentMarker = marker;
-        invalidate();
-
-        if (needUpdate) {
-            updateMarkerAndTrackPos(getWidth(), getHeight(), mCurrentMarker, mCurrentIndex);
-            if (marker != null && marker.isStateful()) {
-                int[] state = getDrawableState();
-                marker.setState(state);
-            }
-        }
-    }
-
-    private void setPreviousMarker(Drawable marker) {
-        final boolean needUpdate;
-        needUpdate = setMarker(mPreviousMarker, marker);
-        mPreviousMarker = marker;
-        invalidate();
-
-        if (needUpdate) {
-            updateMarkerAndTrackPos(getWidth(), getHeight(), mPreviousMarker, Math.max(mCurrentIndex - 1, 0));
-            if (marker != null && marker.isStateful()) {
-                int[] state = getDrawableState();
-                marker.setState(state);
-            }
-        }
-    }
-
-    private boolean setMarker(Drawable prevMarker, Drawable marker) {
-        final boolean needUpdate;
-
-        if (prevMarker != null && marker != prevMarker) {
-            prevMarker.setCallback(null);
-            needUpdate = true;
-        } else {
-            needUpdate = false;
-        }
-
-        if (marker != null) {
-            marker.setCallback(this);
-            if (canResolveLayoutDirection()) {
-                marker.setLayoutDirection(getLayoutDirection());
-            }
-
-            mMarkerOffset = mMarkerRadius / 2;
-
-            if (needUpdate &&
-                    (marker.getIntrinsicWidth() != prevMarker.getIntrinsicWidth()
-                            || marker.getIntrinsicHeight() != prevMarker.getIntrinsicHeight()))
-                requestLayout();
-        }
-
-        return needUpdate;
-    }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         drawHistoryBar(canvas);
-        drawMarker(canvas, mPreviousMarker);
-        drawMarker(canvas, mCurrentMarker);
-        drawMarker(canvas, mFutureMarker);
-        if (mPreviousMarker != null && mCurrentMarker != null && mFutureMarker != null){
-            Paint.FontMetrics metrics = mPrevTextPaint.getFontMetrics();
-            if (mCurrentIndex > 0) {
-                Rect bounds = mPreviousMarker.getBounds();
-                canvas.drawText(mTexts.get(mCurrentIndex - 1), bounds.right + mTextOffset, bounds.bottom - metrics.descent * 2, mPrevTextPaint);
-            }
+        for (int i = 0; i < mCurrentIndex + 2; i++) {
+            if (i >= mMarkers.size()) break;
+            Drawable marker = mMarkers.get(i);
+            drawMarker(canvas, marker);
+            Paint.FontMetrics metrics;
+            Paint paint;
 
-            metrics = mCurrentTextPaint.getFontMetrics();
-            Rect bounds = mCurrentMarker.getBounds();
-            canvas.drawText(mTexts.get(mCurrentIndex), bounds.right + mTextOffset, bounds.bottom - metrics.descent * 2, mCurrentTextPaint);
+            if (i < mCurrentIndex)
+                paint = mPrevTextPaint;
+            else if (i == mCurrentIndex)
+                paint = mCurrentTextPaint;
+            else
+                paint = mFutureTextPaint;
 
-            bounds = mFutureMarker.getBounds();
-            metrics = mFutureTextPaint.getFontMetrics();
-            if (mCurrentIndex + 1 < mTexts.size()) {
-                canvas.drawText(mTexts.get(mCurrentIndex + 1), bounds.right + mTextOffset, bounds.bottom - metrics.descent * 2, mFutureTextPaint);
-            }
+            metrics = paint.getFontMetrics();
+            Rect bounds = marker.getBounds();
+            canvas.drawText(mHistories.get(i), bounds.right + mTextOffset, bounds.bottom - metrics.descent * 2, paint);
         }
     }
 
@@ -361,58 +310,40 @@ public class HistoryBar extends ProgressBar {
         }
     }
 
-    private void updateMarkerAndTrackPos(int width, int height, Drawable marker, float scale) {
-        if (mOrientation) {
-            updateMarkerAndTrackPosVertical(width, height, marker, scale);
-        }
-    }
-
-    private void updateMarkerAndTrackPosVertical(int width, int height, Drawable marker, float scale) {
+    private void updateTrackPosVertical(int height) {
         final int barWidth = mBarWidth;
         final Drawable bar = getProgressDrawable();
 
-        final int markerHeight = mMarkerRadius * 2;
+        final int markerWidth = mMarkerRadius * 2;
 
         int barOffset;
-        int markerOffset;
-        markerOffset = 0;
-        barOffset = (markerHeight - barWidth) / 2;
+        barOffset = (markerWidth - barWidth) / 2;
 
 
         if (bar != null) {
             final int barHeight = height - getPaddingTop() - getPaddingBottom() - barOffset * 2;
             bar.setBounds(barOffset, barOffset, barOffset + barWidth, barOffset + barHeight);
-        }
-
-        if (marker != null) {
-            setMarkerPosV(height, marker, scale, markerOffset);
+            Log.d("LMS", String.valueOf(barOffset));
         }
     }
 
-    private void setMarkerPosV(int h, Drawable marker, float scale, int offset) {
+    private void setMarkerPosV(int h, Drawable marker, float scale) {
         int available = h - getPaddingBottom() - getPaddingTop();
         final int markerSize = mMarkerRadius * 2;
-        available -= mMarkerOffset * 2;
         available -= markerSize;
 
         final int markerPos = (int) (scale * available + 0.5f);
 
         final int left, right;
-        if (offset == Integer.MIN_VALUE) {
-            final Rect oldBounds = marker.getBounds();
-            left = oldBounds.left;
-            right = oldBounds.right;
-        } else {
-            left = offset;
-            right = offset + markerSize;
-        }
+        left = 0;
+        right = left + markerSize;
 
         final int bottom = markerPos + markerSize;
 
         final Drawable background = getBackground();
         if (background != null) {
             final int offsetX = getPaddingLeft();
-            final int offsetY = getPaddingTop() - mMarkerOffset;
+            final int offsetY = getPaddingTop();
             background.setHotspotBounds(left + offsetX, markerPos + offsetY,
                     right + offsetX, bottom + offsetY);
         }
@@ -427,7 +358,7 @@ public class HistoryBar extends ProgressBar {
         }
         int max = getMax();
         int range = max - min;
-        return range > 0 ? (mHistories.get(id) - min) / (float) range : 0;
+        return range > 0 ? (mProgresses.get(id) - min) / (float) range : 0;
     }
 
     @Override
@@ -446,7 +377,7 @@ public class HistoryBar extends ProgressBar {
         dh = Math.max(dh, mMarkerRadius * 2);
         dh += (mMarkerRadius * 2 - mBarWidth);
 
-        dw += mLongestTextWidth;
+        dw += mLongestTextWidth + mTextOffset;
 
 
         dw += getPaddingLeft() + getPaddingRight();
