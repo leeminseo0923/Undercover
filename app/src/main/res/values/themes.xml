@@ -6,7 +6,9 @@
     </style>
 
 
-    <style name="Theme.Undercover" parent="Base.Theme.Undercover" />
+    <style name="Theme.Undercover" parent="Base.Theme.Undercover" >
+
+    </style>
 
 
 

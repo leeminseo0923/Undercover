@@ -18,17 +18,23 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.FragmentNavigatorExtrasKt;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 
+import kotlin.Unit;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivitySelectOptionBinding;
 import univ.soongsil.undercover.domain.Region;
 
 public class SelectOptionFragment extends Fragment {
     ActivitySelectOptionBinding binding;
+    private static final int UNIT = 10000;
+
 
 
     @Override
@@ -65,9 +71,15 @@ public class SelectOptionFragment extends Fragment {
         spinner.setAdapter(adapter);
         spinner.setPrompt("여행지 선택");
 
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Region region;
+                Bundle bundle = new Bundle();
+
+                ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
+
                 if(spinner.getItemAtPosition(position).equals("선택")==true) {
                     textView1.setVisibility(View.VISIBLE);
                     textView2.setVisibility(View.INVISIBLE);
@@ -75,26 +87,36 @@ public class SelectOptionFragment extends Fragment {
                     textView4.setVisibility(View.INVISIBLE);
                 }
                 if(spinner.getItemAtPosition(position).equals("부산")==true) {
-                    Region region = Region.BUSAN;
+                    region = Region.BUSAN;
+                    bundle.putString("지역", "부산");
                     textView1.setVisibility(View.INVISIBLE);
                     textView2.setVisibility(View.VISIBLE);
                     textView3.setVisibility(View.INVISIBLE);
+                    textView4.setVisibility(View.INVISIBLE);
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
                 else if(spinner.getItemAtPosition(position).equals("서울")==true) {
-                    Region region = Region.SEOUL;
+                    region = Region.SEOUL;
+                    bundle.putString("지역", "서울");
                     textView1.setVisibility(View.INVISIBLE);
                     textView2.setVisibility(View.VISIBLE);
                     textView3.setVisibility(View.INVISIBLE);
+                    textView4.setVisibility(View.INVISIBLE);
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
                 else if(spinner.getItemAtPosition(position).equals("제주")==true) {
-                    Region region = Region.JEJU;
+                    region = Region.JEJU;
+                    bundle.putString("지역", "제주");
                     textView1.setVisibility(View.INVISIBLE);
                     textView2.setVisibility(View.VISIBLE);
                     textView3.setVisibility(View.INVISIBLE);
+                    textView4.setVisibility(View.INVISIBLE);
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
+
+                //ReadyDoneFragment로 지역 데이터 전달
+                getParentFragmentManager().setFragmentResult("지역requestkey", bundle);
+
             }
 
             @Override
@@ -120,14 +142,19 @@ public class SelectOptionFragment extends Fragment {
                 textView1.setVisibility(View.INVISIBLE);
                 textView2.setVisibility(View.INVISIBLE);
                 textView3.setVisibility(View.VISIBLE);
+                textView4.setVisibility(View.INVISIBLE);
                 frameLayout2.setVisibility(View.VISIBLE);
             }
         });
 
         seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            Bundle bundle = new Bundle();
+
+            ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
             }
 
             @Override
@@ -137,10 +164,26 @@ public class SelectOptionFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekbar2Text.setText(String.format("%d원", seekBar.getProgress()));
+                seekbar2Text.setText(String.format("%d원", seekBar.getProgress()*UNIT));
+
+                //ReadyDoneFragment로 가격 데이터 전달
+                bundle.putString("가격", String.format("%d", seekBar.getProgress()*UNIT));
+                getParentFragmentManager().setFragmentResult("가격requestkey", bundle);
+
+                textView1.setVisibility(View.INVISIBLE);
+                textView2.setVisibility(View.INVISIBLE);
                 textView3.setVisibility(View.INVISIBLE);
                 textView4.setVisibility(View.VISIBLE);
                 getbutton.setVisibility(View.VISIBLE);
+            }
+
+
+        });
+
+        binding.getButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new ReadyDoneFragment()).commit();
             }
         });
 
@@ -149,7 +192,7 @@ public class SelectOptionFragment extends Fragment {
         binding.backbutton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
             }
         });
 
