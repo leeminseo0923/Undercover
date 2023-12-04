@@ -6,7 +6,6 @@ import univ.soongsil.undercover.domain.Coordinate;
 import univ.soongsil.undercover.domain.Place;
 import univ.soongsil.undercover.domain.Region;
 import univ.soongsil.undercover.domain.UpdateUI;
-import univ.soongsil.undercover.domain.User;
 
 public interface PlaceRepository {
     void updateWeight(String placeName, List<Boolean> options, Double rate);
