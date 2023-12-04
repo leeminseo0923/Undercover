@@ -116,7 +116,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void deleteUserFriend(String uID, String friendUid) {
-        //
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("friends", FieldValue.arrayRemove(friendUid))
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
     }
 
     @Override

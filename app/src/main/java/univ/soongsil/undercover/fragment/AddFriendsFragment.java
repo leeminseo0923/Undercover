@@ -13,16 +13,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +29,7 @@ public class AddFriendsFragment extends Fragment {
 
     private static final String TAG = "ADD_FRIENDS";
     FragmentAddFriendsBinding binding;
+    private MyAdapter myAdapter;
 
     private UserRepository userRepository;
     private FirebaseFirestore db;
@@ -69,7 +64,8 @@ public class AddFriendsFragment extends Fragment {
                             friendRequests = (List<String>) data.get("friendRequests");
 
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-                            binding.recyclerView.setAdapter(new MyAdapter(friendRequests));
+                            myAdapter = new MyAdapter(friendRequests);
+                            binding.recyclerView.setAdapter(myAdapter);
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -130,6 +126,28 @@ public class AddFriendsFragment extends Fragment {
         private MyViewHolder(AddFriendsItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.acceptButton.setOnClickListener(v -> {
+                String docId = userRepository.getCurrentUser().getUid();
+                String friendUid = binding.friendUid.getText().toString();
+
+                userRepository.deleteUserFriendRequest(docId, friendUid);
+                userRepository.addUserFriend(docId, friendUid);
+                userRepository.addUserFriend(friendUid, docId);
+
+                friendRequests.remove(getBindingAdapterPosition());
+                myAdapter.notifyItemRemoved(getBindingAdapterPosition());
+            });
+
+            binding.declineButton.setOnClickListener(v -> {
+                String docId = userRepository.getCurrentUser().getUid();
+                String friendUid = binding.friendUid.getText().toString();
+
+                userRepository.deleteUserFriendRequest(docId, friendUid);
+
+                friendRequests.remove(getBindingAdapterPosition());
+                myAdapter.notifyItemRemoved(getBindingAdapterPosition());
+            });
         }
     }
 
@@ -176,28 +194,6 @@ public class AddFriendsFragment extends Fragment {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
                     });
-
-            holder.binding.acceptButton.setOnClickListener(v -> {
-                String docId = userRepository.getCurrentUser().getUid();
-                String friendUid = holder.binding.friendUid.getText().toString();
-
-                userRepository.deleteUserFriendRequest(docId, friendUid);
-                userRepository.addUserFriend(docId, friendUid);
-                userRepository.addUserFriend(friendUid, docId);
-
-                friendRequests.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
-
-            holder.binding.declineButton.setOnClickListener(v -> {
-                String docId = userRepository.getCurrentUser().getUid();
-                String friendUid = holder.binding.friendUid.getText().toString();
-
-                userRepository.deleteUserFriendRequest(docId, friendUid);
-
-                friendRequests.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
         }
 
         @Override
