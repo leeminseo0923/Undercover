@@ -2,8 +2,10 @@ package univ.soongsil.undercover;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.Path;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.animation.PathInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,8 +34,19 @@ public class StartActivity extends AppCompatActivity {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(ObjectAnimator.ofFloat(binding.bottomLabel, "translationX", "translationY", path_bottom))
                         .with(ObjectAnimator.ofFloat(binding.topLabel, "translationX", "translationY", path_top));
-        animatorSet.setDuration(2000);
+        animatorSet.setDuration(1700);
         animatorSet.setInterpolator(new PathInterpolator(0.5f, 0.3f));
         animatorSet.start();
+
+        //StartActivity의 에니메이션을 1.5초동안 실행시키고 나면 MainActivity로 보냄.
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(StartActivity.this, MainActivity.class);
+                startActivity(intent);
+
+                finish();
+            }
+        },1500);
     }
 }

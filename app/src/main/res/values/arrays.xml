@@ -15,4 +15,11 @@
         <item>가까운 맛집</item>
         <item>쇼핑 비선호</item>
     </string-array>
+
+    <string-array name="location_array">
+        <item>선택</item>
+        <item>서울</item>
+        <item>부산</item>
+        <item>제주</item>
+    </string-array>
 </resources>
