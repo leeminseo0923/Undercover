@@ -29,6 +29,7 @@ public class AddFriendsFragment extends Fragment {
 
     private static final String TAG = "ADD_FRIENDS";
     FragmentAddFriendsBinding binding;
+    private MyAdapter myAdapter;
 
     private UserRepository userRepository;
     private FirebaseFirestore db;
@@ -63,7 +64,8 @@ public class AddFriendsFragment extends Fragment {
                             friendRequests = (List<String>) data.get("friendRequests");
 
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-                            binding.recyclerView.setAdapter(new MyAdapter(friendRequests));
+                            myAdapter = new MyAdapter(friendRequests);
+                            binding.recyclerView.setAdapter(myAdapter);
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -124,6 +126,28 @@ public class AddFriendsFragment extends Fragment {
         private MyViewHolder(AddFriendsItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.acceptButton.setOnClickListener(v -> {
+                String docId = userRepository.getCurrentUser().getUid();
+                String friendUid = binding.friendUid.getText().toString();
+
+                userRepository.deleteUserFriendRequest(docId, friendUid);
+                userRepository.addUserFriend(docId, friendUid);
+                userRepository.addUserFriend(friendUid, docId);
+
+                friendRequests.remove(getBindingAdapterPosition());
+                myAdapter.notifyItemRemoved(getBindingAdapterPosition());
+            });
+
+            binding.declineButton.setOnClickListener(v -> {
+                String docId = userRepository.getCurrentUser().getUid();
+                String friendUid = binding.friendUid.getText().toString();
+
+                userRepository.deleteUserFriendRequest(docId, friendUid);
+
+                friendRequests.remove(getBindingAdapterPosition());
+                myAdapter.notifyItemRemoved(getBindingAdapterPosition());
+            });
         }
     }
 
@@ -170,28 +194,6 @@ public class AddFriendsFragment extends Fragment {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
                     });
-
-            holder.binding.acceptButton.setOnClickListener(v -> {
-                String docId = userRepository.getCurrentUser().getUid();
-                String friendUid = holder.binding.friendUid.getText().toString();
-
-                userRepository.deleteUserFriendRequest(docId, friendUid);
-                userRepository.addUserFriend(docId, friendUid);
-                userRepository.addUserFriend(friendUid, docId);
-
-                friendRequests.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
-
-            holder.binding.declineButton.setOnClickListener(v -> {
-                String docId = userRepository.getCurrentUser().getUid();
-                String friendUid = holder.binding.friendUid.getText().toString();
-
-                userRepository.deleteUserFriendRequest(docId, friendUid);
-
-                friendRequests.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
         }
 
         @Override
