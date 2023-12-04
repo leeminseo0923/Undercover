@@ -15,8 +15,6 @@ import univ.soongsil.undercover.databinding.ActivitySettingBinding;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private static final String TAG = "EmailPassword";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

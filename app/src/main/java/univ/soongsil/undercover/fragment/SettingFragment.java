@@ -21,14 +21,12 @@ import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 public class SettingFragment extends Fragment {
 
-    private static final String TAG = "EmailPassword";
     ActivitySettingBinding binding;
-    UserRepository userRepository = new UserRepositoryImpl();
+    private UserRepository userRepository;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Fragment에서 viewBinding 이용하기
         binding = ActivitySettingBinding.inflate(inflater);
         return binding.getRoot();
     }
@@ -48,7 +46,9 @@ public class SettingFragment extends Fragment {
         });
 
         binding.logoutButton.setOnClickListener(v -> {
-            signOut();
+            userRepository = new UserRepositoryImpl();
+            userRepository.logout();
+
             Intent intent = new Intent(getContext(), LoginActivity.class);
             assert getActivity() != null;
             getActivity().startActivity(intent);
@@ -58,16 +58,6 @@ public class SettingFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // binding 객체를 Garbage Collector가 회수하도록 하기 위해 참조를 끊음
-    }
-
-    private void signOut() {
-        userRepository.signOut();
-
-        // Check if there is no current user.
-        if (userRepository.getCurrentUser() == null)
-            Log.d(TAG, "signOut:success");
-        else
-            Log.d(TAG, "signOut:failure");
+        binding = null;
     }
 }

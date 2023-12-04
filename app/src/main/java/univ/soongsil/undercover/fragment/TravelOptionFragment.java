@@ -35,10 +35,7 @@ public class TravelOptionFragment extends Fragment {
     private static final String TAG = "TRAVEL_OPTION";
     FragmentTravelOptionBinding binding;
 
-    private User user;
-    private UserRepository userRepository = new UserRepositoryImpl();
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    String docId = userRepository.getCurrentUser().getUid();
+    private UserRepository userRepository;
     private List<Boolean> travelOptions;
 
     @Override
@@ -52,27 +49,31 @@ public class TravelOptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // docId를 통해 Firestore에서 데이터를 가져옴
-        DocumentReference docRef = db.collection("user").document(docId);
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
+        userRepository = new UserRepositoryImpl();
+        String docId = userRepository.getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                if (document.exists()) {
-                    Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+        db.collection("user")
+                .document(docId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
 
-                    Map<String, Object> data = document.getData();
-                    travelOptions = (List<Boolean>) data.get("options");
+                            Map<String, Object> data = document.getData();
+                            travelOptions = (List<Boolean>) data.get("options");
 
-                    binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-                    binding.recyclerView.setAdapter(new MyAdapter(travelOptions));
-                } else {
-                    Log.d(TAG, "No such document");
-                }
-            } else {
-                Log.d(TAG, "get failed with ", task.getException());
-            }
-        });
+                            binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
+                            binding.recyclerView.setAdapter(new MyAdapter(travelOptions));
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                });
     }
 
     @Override
@@ -103,13 +104,8 @@ public class TravelOptionFragment extends Fragment {
 
                 travelOptions.set(getAdapterPosition(), isChecked);
 
-                // update() 메소드 이용
-                db.collection("user").document(docId)
-                        .update("options", travelOptions)
-                        .addOnSuccessListener(aVoid ->
-                                Log.d(TAG, "DocumentSnapshot successfully updated!"))
-                        .addOnFailureListener(e ->
-                                Log.w(TAG, "Error updating document", e));
+                String docId = userRepository.getCurrentUser().getUid();
+                userRepository.updateUserOptions(docId, travelOptions);
             });
         }
     }
