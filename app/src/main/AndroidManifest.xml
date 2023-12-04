@@ -7,7 +7,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="UnderCover"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Undercover"
@@ -26,15 +26,15 @@
             android:exported="true" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
+        <activity android:name=".StartActivity"
+            android:exported="false"/>
         <activity
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".BalanceGameActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainPageActivity"
             android:exported="false" />
         <activity
             android:name=".FriendsPageActivity"

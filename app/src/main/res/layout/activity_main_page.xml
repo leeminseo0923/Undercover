@@ -4,18 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".MainPageActivity">
+    android:orientation="vertical">
 
     <Button
-        android:id="@+id/befordtravel"
-        android:layout_width="187dp"
-        android:layout_height="59dp"
+        android:id="@+id/beforetravel"
+        android:layout_width="190dp"
+        android:layout_height="55dp"
         android:backgroundTint="#FDA286"
+        android:background="@drawable/button_round"
         android:text="이전 여행"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:textStyle="bold"
-        android:layout_marginTop="400dp"
+        android:textColor="@color/white"
+        android:layout_marginTop="450dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="false"
         />
@@ -23,13 +24,15 @@
 
     <Button
         android:id="@+id/gotravle"
-        android:layout_width="187dp"
-        android:layout_height="59dp"
+        android:layout_width="190dp"
+        android:layout_height="55dp"
+        android:background="@drawable/button_round"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="230dp"
         android:backgroundTint="#FDA286"
+        android:textColor="@color/white"
         android:text="여행 하기"
-        android:textSize="18dp"
+        android:textSize="20dp"
         android:textStyle="bold"
         />
 

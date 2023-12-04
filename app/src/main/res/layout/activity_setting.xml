@@ -20,7 +20,7 @@
             android:stateListAnimator="@null"
             android:text="@string/edit_information"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -39,7 +39,7 @@
             android:stateListAnimator="@null"
             android:text="@string/travel_option"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -58,7 +58,7 @@
             android:stateListAnimator="@null"
             android:text="@string/logout_button_string"
             android:textColor="@color/white"
-            android:textSize="25sp"
+            android:textSize="20dp"
             android:textStyle="bold" />
     </LinearLayout>
 
