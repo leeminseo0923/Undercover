@@ -1,6 +1,8 @@
 package univ.soongsil.undercover.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ public class FriendsPageFragment extends Fragment {
 
     private static final String TAG = "FRIENDS_PAGE";
     FragmentFriendsPageBinding binding;
+    private MyAdapter myAdapter;
 
     private UserRepository userRepository;
     private FirebaseFirestore db;
@@ -61,7 +64,8 @@ public class FriendsPageFragment extends Fragment {
                             friends = (List<String>) data.get("friends");
 
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
-                            binding.recyclerView.setAdapter(new MyAdapter(friends));
+                            myAdapter = new MyAdapter(friends);
+                            binding.recyclerView.setAdapter(myAdapter);
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -83,6 +87,17 @@ public class FriendsPageFragment extends Fragment {
         private MyViewHolder(FriendsPageItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            binding.deleteButton.setOnClickListener(v -> {
+                String docId = userRepository.getCurrentUser().getUid();
+                String friendUid = binding.friendUid.getText().toString();
+
+                userRepository.deleteUserFriend(docId, friendUid);
+                userRepository.deleteUserFriend(friendUid, docId);
+
+                friends.remove(getBindingAdapterPosition());
+                myAdapter.notifyItemRemoved(getBindingAdapterPosition());
+            });
         }
     }
 
@@ -129,17 +144,6 @@ public class FriendsPageFragment extends Fragment {
                             Log.d(TAG, "get failed with ", task.getException());
                         }
                     });
-
-            holder.binding.deleteButton.setOnClickListener(v -> {
-                String docId = userRepository.getCurrentUser().getUid();
-                String friendUid = holder.binding.friendUid.getText().toString();
-
-                userRepository.deleteUserFriend(docId, friendUid);
-                userRepository.deleteUserFriend(friendUid, docId);
-
-                friends.remove(holder.getAdapterPosition());
-                notifyDataSetChanged();
-            });
         }
 
         @Override
