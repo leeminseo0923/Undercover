@@ -9,7 +9,7 @@ import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.domain.User;
 
 public interface PlaceRepository {
-    void updateWeight(String placeName, User user, Integer rate);
+    void updateWeight(String placeName, List<Boolean> options, Double rate);
 
     void addPlace(Place place);
 
