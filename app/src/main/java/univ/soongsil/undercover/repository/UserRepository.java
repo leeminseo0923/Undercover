@@ -14,6 +14,8 @@ public interface UserRepository {
     FirebaseUser getCurrentUser();
     void setUserDocument(String uID, User user);
     void updateUserOptions(String uID, List<Boolean> options);
-    void updateUserFriends(String uID, List<String> friends);
-    void updateUserFriendRequests(String uID, List<String> friendRequests);
+    void addUserFriend(String uID, String friendUid);
+    void deleteUserFriend(String uID, String friendUid);
+    void addUserFriendRequest(String friendUid, String uID);
+    void deleteUserFriendRequest(String uID, String friendUid);
 }

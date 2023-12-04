@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseUser;
 
 import univ.soongsil.undercover.LoginActivity;
+import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.FragmentEditInfoBinding;
 import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.repository.UserRepository;
@@ -53,15 +55,17 @@ public class EditInfoFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String confirmPassword = binding.confirmPassword.getText().toString();
+                int red = ContextCompat.getColor(getActivity().getApplicationContext(), R.color.red);
+                int green = ContextCompat.getColor(getActivity().getApplicationContext(), R.color.green);
 
                 if (confirmPassword.equals("")) {
                     binding.passwordMatch.setText("");
                 } else if (s.toString().equals(confirmPassword)) {
                     binding.passwordMatch.setText("새 비밀번호와 일치합니다.");
-                    binding.passwordMatch.setTextColor(Color.parseColor("#0AAC50")); // green
+                    binding.passwordMatch.setTextColor(green);
                 } else {
                     binding.passwordMatch.setText("새 비밀번호와 일치하지 않습니다.");
-                    binding.passwordMatch.setTextColor(Color.parseColor("#F44039")); // red
+                    binding.passwordMatch.setTextColor(red);
                 }
             }
 
