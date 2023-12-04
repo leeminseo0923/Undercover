@@ -19,7 +19,7 @@ import univ.soongsil.undercover.domain.UpdateUI;
 public abstract class PlaceRepositoryImpl implements PlaceRepository{
 
     public final String COLLECTION;
-    private final CollectionReference reference;
+    protected final CollectionReference reference;
     private final double DELTA = 0.00001;
 
     protected PlaceRepositoryImpl(String collection, CollectionReference reference) {
@@ -77,26 +77,4 @@ public abstract class PlaceRepositoryImpl implements PlaceRepository{
                 .addOnFailureListener(e -> Log.e(COLLECTION, "Fail to get location in " + placeName + " " + e.getMessage()));
     }
 
-    @Override
-    public void getBestPlaces(Region region, List<Boolean> options, UpdateUI<List<String>> updateUI) {
-        reference.get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Pair<String, Double>> places = new ArrayList<>();
-                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Place place = documentSnapshot.toObject(Place.class);
-                        Double sum = 0.0;
-                        for (int i = 0; i < options.size(); i++) {
-                            if (options.get(i)) {
-                                sum += place.getWeights().get(i);
-                            }
-                        }
-                        places.add(new Pair<>(place.getName(), sum));
-                    }
-
-                    places.sort((o1, o2) -> (int) (o1.second - o2.second));
-
-                    updateUI.onSuccess(places.stream().map(stringDoublePair -> stringDoublePair.first).collect(Collectors.toList()));
-                })
-                .addOnFailureListener((e)->updateUI.onFail());
-    }
 }

@@ -38,6 +38,12 @@ public abstract class Place {
      */
     private String region;
 
+    public Place() {
+        location = new Coordinate(0.0, 0.0);
+        weights = new ArrayList<>();
+        name = "";
+    }
+
     /**
      * @param name a name of the place
      * @param location a coordinates of the place, it have longitude and latitude.

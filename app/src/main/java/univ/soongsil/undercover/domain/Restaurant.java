@@ -2,6 +2,8 @@ package univ.soongsil.undercover.domain;
 
 public class Restaurant extends Place {
 
+    public Restaurant() {super();}
+
     public Restaurant(String name, Coordinate location) {
         super(name, location);
     }

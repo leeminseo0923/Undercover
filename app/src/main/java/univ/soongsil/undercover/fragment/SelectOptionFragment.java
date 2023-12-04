@@ -1,6 +1,7 @@
 package univ.soongsil.undercover.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,17 +26,37 @@ import androidx.navigation.fragment.FragmentNavigatorExtrasKt;
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 import kotlin.Unit;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivitySelectOptionBinding;
 import univ.soongsil.undercover.domain.Region;
+import univ.soongsil.undercover.domain.UpdateUI;
+import univ.soongsil.undercover.domain.User;
+import univ.soongsil.undercover.repository.PlaceRepository;
+import univ.soongsil.undercover.repository.RestaurantRepositoryImpl;
+import univ.soongsil.undercover.repository.SightRepositoryImpl;
+import univ.soongsil.undercover.repository.UserRepository;
+import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 public class SelectOptionFragment extends Fragment {
     ActivitySelectOptionBinding binding;
     private static final int UNIT = 10000;
 
+    PlaceRepository restaurantRepository;
+    PlaceRepository sightRepository;
+    UserRepository userRepository;
 
+    Region region;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userRepository = new UserRepositoryImpl();
+        restaurantRepository = new RestaurantRepositoryImpl();
+        sightRepository = new SightRepositoryImpl();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -75,7 +96,6 @@ public class SelectOptionFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Region region;
                 Bundle bundle = new Bundle();
 
                 ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
@@ -183,6 +203,40 @@ public class SelectOptionFragment extends Fragment {
         binding.getButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                userRepository.getUser(userRepository.getCurrentUser().getUid(),
+                        new UpdateUI<>() {
+                            @Override
+                            public void onSuccess(User user) {
+                                List<Boolean> options = user.getOptions();
+                                sightRepository.getBestPlaces(region, options, new UpdateUI<>() {
+                                    @Override
+                                    public void onSuccess(List<String> sightNames) {
+                                        for(String name: sightNames) {
+                                            Log.d("SIGHT", name);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFail() {}
+                                });
+
+                                restaurantRepository.getBestPlaces(region, options, new UpdateUI<List<String>>() {
+                                    @Override
+                                    public void onSuccess(List<String> result) {
+                                        for(String name: result) {
+                                            Log.d("SIGHT", name);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFail() {
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFail() {}
+                        });
                 getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new ReadyDoneFragment()).commit();
             }
         });
