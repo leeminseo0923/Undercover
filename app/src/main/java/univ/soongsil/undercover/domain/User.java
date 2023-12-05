@@ -70,8 +70,7 @@ public class User {
     }
 
     public void setOptions(List<Boolean> options) {
-        // TODO: 개수는 수정 예정
-        if (options.size() != 5) throw new IllegalArgumentException("option은 5개여야 합니다.");
+        if (options.size() != 6) throw new IllegalArgumentException("option은 6개여야 합니다.");
         this.options = options;
     }
 

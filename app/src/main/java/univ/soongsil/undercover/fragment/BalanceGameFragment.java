@@ -3,6 +3,7 @@ package univ.soongsil.undercover.fragment;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,37 +11,28 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import univ.soongsil.undercover.BalanceGameActivity;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.FragmentBalanceGameBinding;
-import univ.soongsil.undercover.domain.User;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 public class BalanceGameFragment extends Fragment {
 
-    private static final String TAG = "BALANCE_GAME";
     FragmentBalanceGameBinding binding;
 
     private static int count = 0;
-    private static final String CHOICE_UP = "CHOICE_UP";
-    private static final String CHOICE_DOWN = "CHOICE_DOWN";
+    private static final String CHOICE_UP = "choiceUp";
+    private static final String CHOICE_DOWN = "choiceDown";
     private static final List<Boolean> travelOptions = new ArrayList<>();
 
     private UserRepository userRepository;
@@ -61,12 +53,16 @@ public class BalanceGameFragment extends Fragment {
         String[] arrayUp = getResources().getStringArray(R.array.option_array_up);
         String[] arrayDown = getResources().getStringArray(R.array.option_array_down);
 
-        // TODO: 이미지 다 찾으면 이미지 이름 수정
-        binding.choiceUpImage.setImageResource(R.drawable.choice_mountain);
-        binding.choiceDownImage.setImageResource(R.drawable.choice_beach);
+        TypedArray imageUp = getResources().obtainTypedArray(R.array.image_array_up);
+        TypedArray imageDown = getResources().obtainTypedArray(R.array.image_array_down);
 
         binding.choiceUpText.setText(arrayUp[count]);
+        binding.choiceUpText.setShadowLayer(3, 3, 3, R.color.black);
         binding.choiceDownText.setText(arrayDown[count]);
+        binding.choiceDownText.setShadowLayer(3, 3, 3, R.color.black);
+
+        binding.choiceUpImage.setImageResource(imageUp.getResourceId(count, 0));
+        binding.choiceDownImage.setImageResource(imageDown.getResourceId(count, 0));
 
         binding.choiceUpImage.setOnClickListener(v -> {
             startAnimations(CHOICE_UP);
@@ -77,10 +73,6 @@ public class BalanceGameFragment extends Fragment {
             new Handler().postDelayed(() -> {
                 if (count == arrayUp.length) {
                     count = 0;
-                    // 옵션 확인용 Log 메시지
-                    for (Boolean item : travelOptions) {
-                        Log.d(TAG, "옵션: " + item);
-                    }
 
                     String docId = userRepository.getCurrentUser().getUid();
                     userRepository.updateUserOptions(docId, travelOptions);
@@ -105,10 +97,6 @@ public class BalanceGameFragment extends Fragment {
             new Handler().postDelayed(() -> {
                 if (count == arrayDown.length) {
                     count = 0;
-                    // 옵션 확인용 Log 메시지
-                    for (Boolean item : travelOptions) {
-                        Log.d(TAG, "옵션: " + item);
-                    }
 
                     String docId = userRepository.getCurrentUser().getUid();
                     userRepository.updateUserOptions(docId, travelOptions);

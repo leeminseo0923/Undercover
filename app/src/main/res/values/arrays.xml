@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="option_array_up">
-        <item>산</item>
+        <item>빵</item>
+        <item>웨이팅 1시간\n맛집</item>
         <item>휴식</item>
-        <item>대중교통</item>
-        <item>찾아가는 맛집</item>
-        <item>쇼핑 선호</item>
+        <item>광활한 자연</item>
+        <item>나만의 핫플</item>
+        <item>MBTI E</item>
     </string-array>
 
     <string-array name="option_array_down">
-        <item>바다</item>
+        <item>밥</item>
+        <item>웨이팅 없는\n맛집</item>
         <item>액티비티</item>
-        <item>뚜벅이</item>
-        <item>가까운 맛집</item>
-        <item>쇼핑 비선호</item>
+        <item>초고층 빌딩</item>
+        <item>인스타 핫플</item>
+        <item>MBTI I</item>
     </string-array>
+
+    <array name="image_array_up">
+        <item>@drawable/choice1_bread</item>
+        <item>@drawable/choice2_waiting</item>
+        <item>@drawable/choice3_relax</item>
+        <item>@drawable/choice4_nature</item>
+        <item>@drawable/choice5_my_own_place</item>
+        <item>@drawable/choice6_mbti_e</item>
+    </array>
+
+    <array name="image_array_down">
+        <item>@drawable/choice1_rice</item>
+        <item>@drawable/choice2_no_waiting</item>
+        <item>@drawable/choice3_active</item>
+        <item>@drawable/choice4_city</item>
+        <item>@drawable/choice5_instagram_place</item>
+        <item>@drawable/choice6_mbti_i</item>
+    </array>
 
     <string-array name="location_array">
         <item>선택</item>
