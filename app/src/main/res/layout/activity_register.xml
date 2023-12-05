@@ -2,117 +2,116 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:padding="40dp"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:padding="40dp">
 
     <LinearLayout
-        app:layout_constraintBottom_toTopOf="@id/password_linear_layout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/email_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/password_linear_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:fontFamily="@font/roboto_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/email"
             android:textColor="@color/main_color"
             android:textSize="14sp" />
 
         <EditText
-            android:fontFamily="@font/roboto_bold"
             android:id="@+id/email_edit_text"
             android:layout_width="match_parent"
-
-            android:textSize="24sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:autofillHints="emailAddress"
             android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/roboto_bold"
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
-            android:autofillHints="emailAddress"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
-        app:layout_constraintBottom_toTopOf="@id/name_linear_layout"
-        app:layout_constraintTop_toBottomOf="@id/email_linear_layout"
         android:id="@+id/password_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/name_linear_layout"
+        app:layout_constraintTop_toBottomOf="@id/email_linear_layout">
 
         <TextView
-            android:fontFamily="@font/roboto_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/password"
             android:textColor="@color/main_color"
             android:textSize="14sp" />
 
         <EditText
-            android:fontFamily="@font/roboto_bold"
             android:id="@+id/password_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:autofillHints="password"
             android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/roboto_bold"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textSize="24sp"
-            android:autofillHints="password"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
-        app:layout_constraintBottom_toTopOf="@id/register_button"
         android:id="@+id/name_linear_layout"
-        app:layout_constraintTop_toBottomOf="@id/password_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/register_button"
+        app:layout_constraintTop_toBottomOf="@id/password_linear_layout">
 
         <TextView
-            android:fontFamily="@font/roboto_bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
             android:text="@string/name"
             android:textColor="@color/main_color"
             android:textSize="14sp" />
 
         <EditText
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="24sp"
             android:id="@+id/name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:autofillHints="name"
             android:backgroundTint="@color/main_color"
+            android:fontFamily="@font/roboto_bold"
             android:hint="@string/name_hint"
             android:inputType="textPersonName"
-            android:autofillHints="name"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <Button
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name_linear_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:id="@+id/register_button"
         android:layout_width="187dp"
         android:layout_height="59dp"
-        android:backgroundTint="@color/main_color"
+        android:background="@drawable/button_round"
         android:fontFamily="@font/roboto_bold"
         android:text="@string/register_button_string"
+        android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:cornerRadius="10dp" />
+        app:cornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_linear_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
