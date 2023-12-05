@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,7 +18,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import univ.soongsil.undercover.LoginActivity;
 import univ.soongsil.undercover.R;
@@ -31,7 +37,7 @@ public class EditInfoFragment extends Fragment {
     private static final String TAG = "EDIT_INFO";
     FragmentEditInfoBinding binding;
 
-    UserRepository userRepository = new UserRepositoryImpl();
+    private UserRepository userRepository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,8 +50,28 @@ public class EditInfoFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        userRepository = new UserRepositoryImpl();
         String email = userRepository.getCurrentUser().getEmail();
         binding.userEmail.setText(email);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("user")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+
+                            String name = (String) document.getData().get("name");
+                            binding.editName.setHint(name);
+                        }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        binding.editName.setHint("Name");
+                    }
+                });
 
         binding.newPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,6 +126,7 @@ public class EditInfoFragment extends Fragment {
         });
 
         binding.editCompleteButton.setOnClickListener(v -> {
+            String editName = binding.editName.getText().toString();
             String currentPassword = binding.currentPassword.getText().toString();
             String newPassword = binding.newPassword.getText().toString();
             String confirmPassword = binding.confirmPassword.getText().toString();
@@ -124,17 +151,21 @@ public class EditInfoFragment extends Fragment {
             userRepository.login(email, currentPassword, new UpdateUI<FirebaseUser>() {
                 @Override
                 public void onSuccess(FirebaseUser result) {
-                    FirebaseUser user = userRepository.getCurrentUser();
                     if (currentPassword.equals(newPassword)) {
                         makeToast("현재 비밀번호와 새 비밀번호가 일치하여 수정할 수 없습니다.");
                         return;
+                    }
+
+                    FirebaseUser user = userRepository.getCurrentUser();
+                    if (!editName.equals("")) {
+                        userRepository.updateUserName(user.getUid(), editName);
                     }
 
                     user.updatePassword(newPassword)
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Log.d(TAG, "User password updated.");
-                                    makeToast("비밀번호가 변경되었습니다.\n로그아웃합니다.");
+                                    makeToast("회원 정보가 변경되었습니다.\n로그아웃합니다.");
 
                                     userRepository.logout();
                                     Intent intent = new Intent(getContext(), LoginActivity.class);

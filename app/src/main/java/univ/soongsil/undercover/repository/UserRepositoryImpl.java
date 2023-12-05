@@ -146,4 +146,15 @@ public class UserRepositoryImpl implements UserRepository {
                 .addOnFailureListener(e ->
                         Log.w(COLLECTION, "Error updating document", e));
     }
+
+    @Override
+    public void updateUserName(String uID, String name) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("name", name)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
+    }
 }

@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
             android:fontFamily="@font/roboto_bold"
-            android:hint="Name"
+            android:hint=""
             android:inputType="text"
             android:textColorHint="#808080" />
     </LinearLayout>
@@ -54,12 +54,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="current password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="current password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/current_password"
@@ -79,12 +92,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="new password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="new password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/new_password"
@@ -104,12 +130,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="confirm password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="confirm password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/confirm_password"
