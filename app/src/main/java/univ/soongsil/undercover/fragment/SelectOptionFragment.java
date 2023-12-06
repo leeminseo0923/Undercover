@@ -13,29 +13,26 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.activity.BackEventCompat;
-import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.fragment.FragmentNavigatorExtrasKt;
+import androidx.room.Room;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import kotlin.Unit;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivitySelectOptionBinding;
+import univ.soongsil.undercover.domain.Place;
 import univ.soongsil.undercover.domain.Region;
-import univ.soongsil.undercover.domain.UpdateUI;
-import univ.soongsil.undercover.domain.User;
+import univ.soongsil.undercover.domain.Restaurant;
+import univ.soongsil.undercover.domain.Sight;
+import univ.soongsil.undercover.repository.AppDatabase;
 import univ.soongsil.undercover.repository.PlaceRepository;
+import univ.soongsil.undercover.repository.RestaurantDao;
 import univ.soongsil.undercover.repository.RestaurantRepositoryImpl;
+import univ.soongsil.undercover.repository.SightDao;
 import univ.soongsil.undercover.repository.SightRepositoryImpl;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
@@ -48,7 +45,15 @@ public class SelectOptionFragment extends Fragment {
     PlaceRepository sightRepository;
     UserRepository userRepository;
 
+    Integer maxCost;
+
+    Integer days;
+
     Region region;
+
+    AppDatabase db;
+
+    public static final String TAG = "Travel_option";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,11 +61,16 @@ public class SelectOptionFragment extends Fragment {
         userRepository = new UserRepositoryImpl();
         restaurantRepository = new RestaurantRepositoryImpl();
         sightRepository = new SightRepositoryImpl();
+        days = 0;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = ActivitySelectOptionBinding.inflate(inflater);
+        if (container != null)
+            db = Room.databaseBuilder(container.getContext(), AppDatabase.class, "undercover.db").build();
+        else
+            Log.e(TAG, "no parent error");
         return binding.getRoot();
     }
 
@@ -100,13 +110,13 @@ public class SelectOptionFragment extends Fragment {
 
                 ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
 
-                if(spinner.getItemAtPosition(position).equals("선택")==true) {
+                if(spinner.getItemAtPosition(position).equals("선택")) {
                     textView1.setVisibility(View.VISIBLE);
                     textView2.setVisibility(View.INVISIBLE);
                     textView3.setVisibility(View.INVISIBLE);
                     textView4.setVisibility(View.INVISIBLE);
                 }
-                if(spinner.getItemAtPosition(position).equals("부산")==true) {
+                if(spinner.getItemAtPosition(position).equals("부산")) {
                     region = Region.BUSAN;
                     bundle.putString("지역", "부산");
                     textView1.setVisibility(View.INVISIBLE);
@@ -115,7 +125,7 @@ public class SelectOptionFragment extends Fragment {
                     textView4.setVisibility(View.INVISIBLE);
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
-                else if(spinner.getItemAtPosition(position).equals("서울")==true) {
+                else if(spinner.getItemAtPosition(position).equals("서울")) {
                     region = Region.SEOUL;
                     bundle.putString("지역", "서울");
                     textView1.setVisibility(View.INVISIBLE);
@@ -124,7 +134,7 @@ public class SelectOptionFragment extends Fragment {
                     textView4.setVisibility(View.INVISIBLE);
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
-                else if(spinner.getItemAtPosition(position).equals("제주")==true) {
+                else if(spinner.getItemAtPosition(position).equals("제주")) {
                     region = Region.JEJU;
                     bundle.putString("지역", "제주");
                     textView1.setVisibility(View.INVISIBLE);
@@ -148,7 +158,7 @@ public class SelectOptionFragment extends Fragment {
         seekBar1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+                days = progress;
             }
 
             @Override
@@ -158,7 +168,7 @@ public class SelectOptionFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekbar1Text.setText(String.format("%dDays", seekBar.getProgress()));
+                seekbar1Text.setText(String.format(getString(R.string.day_string), days));
                 textView1.setVisibility(View.INVISIBLE);
                 textView2.setVisibility(View.INVISIBLE);
                 textView3.setVisibility(View.VISIBLE);
@@ -175,6 +185,7 @@ public class SelectOptionFragment extends Fragment {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                maxCost = seekBar.getProgress() * UNIT;
             }
 
             @Override
@@ -184,10 +195,10 @@ public class SelectOptionFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekbar2Text.setText(String.format("%d원", seekBar.getProgress()*UNIT));
+                seekbar2Text.setText(String.format(getString(R.string.money_string), maxCost));
 
                 //ReadyDoneFragment로 가격 데이터 전달
-                bundle.putString("가격", String.format("%d", seekBar.getProgress()*UNIT));
+                bundle.putInt("가격", maxCost);
                 getParentFragmentManager().setFragmentResult("가격requestkey", bundle);
 
                 textView1.setVisibility(View.INVISIBLE);
@@ -200,60 +211,55 @@ public class SelectOptionFragment extends Fragment {
 
         });
 
-        binding.getButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userRepository.getUser(userRepository.getCurrentUser().getUid(),
-                        new UpdateUI<>() {
-                            @Override
-                            public void onSuccess(User user) {
-                                List<Boolean> options = user.getOptions();
-                                sightRepository.getBestPlaces(region, options, new UpdateUI<>() {
+        binding.getButton.setOnClickListener(v -> {
+            userRepository.getUser(userRepository.getCurrentUser().getUid(),
+                    user -> {
+                        List<Boolean> options = user.getOptions();
+
+                        RestaurantDao restaurantDao = db.restaurantDao();
+                        SightDao sightDao = db.sightDao();
+
+                        restaurantRepository.getBestPlaces(region,
+                                options,maxCost,
+                                days * 3,
+                                result -> new Thread() {
                                     @Override
-                                    public void onSuccess(List<String> sightNames) {
-                                        for(String name: sightNames) {
-                                            Log.d("SIGHT", name);
-                                        }
+                                    public void run() {
+                                        restaurantDao.deleteAll();
+
+                                        Log.d(TAG, String.valueOf(restaurantDao.getAll().size()));
+                                        restaurantDao.insertAll(result.stream()
+                                                .map((Function<Place, Restaurant>) place -> (Restaurant) place)
+                                                .collect(Collectors.toList()));
+                                        Restaurant restaurant = restaurantDao.getAll().get(0);
+                                        Log.d(TAG, restaurant.getName());
                                     }
+                                }.start());
 
+                        sightRepository.getBestPlaces(
+                                region,
+                                options,
+                                maxCost,
+                                days * 3,
+                                result -> new Thread() {
                                     @Override
-                                    public void onFail() {}
-                                });
-
-                                restaurantRepository.getBestPlaces(region, options, new UpdateUI<List<String>>() {
-                                    @Override
-                                    public void onSuccess(List<String> result) {
-                                        for(String name: result) {
-                                            Log.d("SIGHT", name);
-                                        }
+                                    public void run() {
+                                        sightDao.deleteAll();
+                                        Log.d(TAG, String.valueOf(sightDao.getAll().size()));
+                                        sightDao.insertAll(result.stream().map((Function<Place, Sight>) place -> (Sight) place).collect(Collectors.toList()));
+                                        Sight sight = sightDao.getAll().get(0);
+                                        Log.d(TAG, sight.getName());
                                     }
+                                }.start());
 
-                                    @Override
-                                    public void onFail() {
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFail() {}
-                        });
-                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new ReadyDoneFragment()).commit();
-            }
+                    });
+            getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new ReadyDoneFragment()).commit();
         });
 
 
 
-        binding.backbutton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
-            }
-        });
+        binding.backbutton.setOnClickListener(v -> getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit());
 
     }
-
-
-
-
 
 }

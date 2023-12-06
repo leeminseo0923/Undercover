@@ -7,6 +7,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import univ.soongsil.undercover.domain.Place;
@@ -21,24 +22,36 @@ public class RestaurantRepositoryImpl extends PlaceRepositoryImpl {
     }
 
     @Override
-    public void getBestPlaces(Region region, List<Boolean> options, UpdateUI<List<String>> updateUI) {
+    public void getBestPlaces(
+            Region region,
+            List<Boolean> options,
+            Integer maxCost,
+            Integer count,
+            UpdateUI<List<? extends Place>> updateUI
+    ) {
         reference.get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Pair<String, Double>> places = new ArrayList<>();
+                    List<Pair<Restaurant, Double>> restaurants = new ArrayList<>();
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                        Place place = documentSnapshot.toObject(Restaurant.class);
+                        Restaurant restaurant = documentSnapshot.toObject(Restaurant.class);
                         Double sum = 0.0;
                         for (int i = 0; i < options.size(); i++) {
-                            if (options.get(i)) {
-                                sum += place.getWeights().get(i);
+                            if (options.get(i) && Objects.equals(restaurant.getRegion(), region.name())) {
+                                sum += restaurant.getWeights().get(i);
                             }
                         }
-                        places.add(new Pair<>(place.getName(), sum));
+                        restaurants.add(new Pair<>(restaurant, sum));
                     }
 
-                    places.sort((o1, o2) -> (int) (o1.second - o2.second));
+                    restaurants.sort((o1, o2) -> (int) (o1.second - o2.second));
+                    int currentMaxCost = maxCost / 2;
+                    List<Place> result = restaurants.stream()
+                            .filter(placeDoublePair -> placeDoublePair.first.getMaxCost() <= currentMaxCost)
+                            .limit(count)
+                            .map(placeDoublePair -> placeDoublePair.first)
+                            .collect(Collectors.toList());
 
-                    updateUI.onSuccess(places.stream().map(stringDoublePair -> stringDoublePair.first).collect(Collectors.toList()));
+                    updateUI.onSuccess(result);
                 })
                 .addOnFailureListener((e)->updateUI.onFail());
     }

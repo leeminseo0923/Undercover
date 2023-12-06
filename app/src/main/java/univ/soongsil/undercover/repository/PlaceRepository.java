@@ -14,5 +14,5 @@ public interface PlaceRepository {
 
     void getLocation(String placeName, UpdateUI<Coordinate> updateUI);
 
-    void getBestPlaces(Region region, List<Boolean> options, UpdateUI<List<String>> updateUI);
+    void getBestPlaces(Region region, List<Boolean> options,Integer maxCost, Integer count, UpdateUI<List<? extends Place>> updateUI);
 }

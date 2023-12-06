@@ -1,6 +1,7 @@
 package univ.soongsil.undercover.domain;
 
 import androidx.annotation.NonNull;
+import androidx.room.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ public class User {
     private List<Boolean> options;
     private List<String> friendRequests;
 
+    @Ignore
     public User() {
         email = "";
         name = "";
@@ -21,6 +23,7 @@ public class User {
         friendRequests = new ArrayList<>();
     }
 
+    @Ignore
     public User(String name, String email) {
         this.email = email;
         this.name = name;
@@ -33,12 +36,24 @@ public class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<String> getFriends() {
         return friends;
+    }
+
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
     }
 
     public List<Boolean> getOptions() {
