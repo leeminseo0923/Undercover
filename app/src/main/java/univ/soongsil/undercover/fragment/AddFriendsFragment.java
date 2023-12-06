@@ -19,6 +19,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import univ.soongsil.undercover.databinding.AddFriendsItemBinding;
 import univ.soongsil.undercover.databinding.FragmentAddFriendsBinding;
@@ -34,6 +35,8 @@ public class AddFriendsFragment extends Fragment {
     private UserRepository userRepository;
     private FirebaseFirestore db;
     private List<String> friendRequests;
+
+    private static final String REGEX_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,6 +84,10 @@ public class AddFriendsFragment extends Fragment {
 
             if (friendEmail.equals("")) {
                 makeToast("이메일을 입력하세요.");
+                return;
+            }
+            if (!Pattern.matches(REGEX_EMAIL, friendEmail)) {
+                makeToast("이메일 형식이 올바르지 않습니다.");
                 return;
             }
 

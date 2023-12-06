@@ -29,6 +29,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.regex.Pattern;
+
 import univ.soongsil.undercover.LoginActivity;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.SplashActivity;
@@ -44,6 +46,8 @@ public class EditInfoFragment extends Fragment {
 
     private FirebaseUser user;
     private UserRepository userRepository;
+
+    private static final String REGEX_PASSWORD = "^.{8,13}$";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -147,6 +151,10 @@ public class EditInfoFragment extends Fragment {
                 return;
             }
 
+            if (!Pattern.matches(REGEX_PASSWORD, newPassword)) {
+                makeToast("비밀번호 형식이 올바르지 않습니다.");
+                return;
+            }
             if (!newPassword.equals(confirmPassword)) {
                 makeToast("새 비밀번호와 일치하지 않습니다.");
                 return;
