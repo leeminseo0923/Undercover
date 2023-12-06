@@ -20,4 +20,5 @@
     <string name="edit_information">개인정보 수정</string>
     <string name="travel_option">여행 옵션</string>
     <string name="logout_button_string">로그아웃</string>
+    <string name="delete_account"><u>탈퇴하기</u></string>
 </resources>

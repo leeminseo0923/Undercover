@@ -78,6 +78,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void deleteAccount() {
+        if (auth.getCurrentUser() != null) {
+            auth.getCurrentUser()
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(COLLECTION, "User account deleted.");
+                        }
+                    });
+        }
+    }
+
+    @Override
     public FirebaseUser getCurrentUser() {
         return auth.getCurrentUser();
     }

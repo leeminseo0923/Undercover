@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/main_color"
             android:fontFamily="@font/roboto_bold"
-            android:hint=""
+            android:hint="Name"
             android:inputType="text"
             android:textColorHint="#808080" />
     </LinearLayout>
@@ -187,6 +187,23 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/delete_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/delete_account"
+            android:textAlignment="textEnd"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <Space
