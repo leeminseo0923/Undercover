@@ -1,18 +1,13 @@
 package univ.soongsil.undercover;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import com.google.android.material.navigation.NavigationBarView;
 
 import univ.soongsil.undercover.databinding.ActivityMainBinding;
 import univ.soongsil.undercover.fragment.MainPageFragment;

@@ -1,14 +1,10 @@
 package univ.soongsil.undercover.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,8 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 import java.util.Map;
 
-import univ.soongsil.undercover.R;
-import univ.soongsil.undercover.databinding.AddFriendsItemBinding;
 import univ.soongsil.undercover.databinding.FragmentFriendsPageBinding;
 import univ.soongsil.undercover.databinding.FriendsPageItemBinding;
 import univ.soongsil.undercover.repository.UserRepository;
@@ -43,29 +37,6 @@ public class FriendsPageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentFriendsPageBinding.inflate(inflater);
-
-
-        // Inflate the layout for this fragment
-        View view = binding.getRoot();
-
-        // Request focus to receive key events
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-
-        // Set up key event listener
-        view.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // Check if the key event is the Back button
-                if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    // Handle the Back button press
-                    Toast.makeText(getActivity().getApplicationContext(), "눌렸다는", Toast.LENGTH_SHORT).show();
-                    return true; // Consume the event
-                }
-                return false; // Let the event propagate if not handled
-            }
-        });
-
         return binding.getRoot();
     }
 

@@ -1,7 +1,6 @@
 package univ.soongsil.undercover.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -21,8 +20,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +32,6 @@ import univ.soongsil.undercover.LoginActivity;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.SplashActivity;
 import univ.soongsil.undercover.databinding.FragmentEditInfoBinding;
-import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
