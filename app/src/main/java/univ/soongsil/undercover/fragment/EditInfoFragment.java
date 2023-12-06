@@ -78,6 +78,9 @@ public class EditInfoFragment extends Fragment {
                     }
                 });
 
+        binding.backButton.setOnClickListener(v ->
+                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit());
+
         binding.newPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

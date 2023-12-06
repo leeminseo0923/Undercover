@@ -74,6 +74,9 @@ public class TravelOptionFragment extends Fragment {
                         Log.d(TAG, "get failed with ", task.getException());
                     }
                 });
+
+        binding.backButton.setOnClickListener(v ->
+                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit());
     }
 
     @Override
