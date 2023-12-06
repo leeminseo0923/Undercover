@@ -9,11 +9,22 @@ import java.util.List;
 public class Route {
     @PrimaryKey
     private Integer id;
+    private boolean isActive;
     private List<String> names;
     private List<Coordinate> coordinates;
 
-    public Route(List<String> names, List<Coordinate> coordinates) {
+    public Route(List<String> names, List<Coordinate> coordinates, boolean isActive) {
         this.names = names;
+        this.coordinates = coordinates;
+        this.isActive = isActive;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Integer getId() {

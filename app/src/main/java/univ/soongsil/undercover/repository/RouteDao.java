@@ -18,4 +18,10 @@ public interface RouteDao {
 
     @Query("SELECT * FROM Route")
     List<Route> getAll();
+
+    @Query("SELECT * FROM Route WHERE isActive")
+    Route getActivity();
+
+    @Query("UPDATE Route SET isActive = 0 WHERE isActive")
+    void deActivateAll();
 }

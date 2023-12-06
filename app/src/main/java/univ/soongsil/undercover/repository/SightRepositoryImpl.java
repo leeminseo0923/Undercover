@@ -56,4 +56,31 @@ public class SightRepositoryImpl extends PlaceRepositoryImpl {
                 })
                 .addOnFailureListener((e)->updateUI.onFail());
     }
+
+    @Override
+    public void updateWeight(String placeName, List<Boolean> options, Double rate) {
+        reference.document(placeName)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    Sight place = documentSnapshot.toObject(Sight.class);
+                    if (place != null) {
+                        List<Double> weights = place.getWeights();
+                        Double sum = 0.0;
+                        for (int i = 0; i < options.size(); i++) {
+                            if (options.get(i)) {
+                                sum += weights.get(i);
+                            }
+                        }
+                        for (int i = 0; i < options.size(); i++) {
+                            if (options.get(i)) {
+                                weights.set(i, weights.get(i) - DELTA * (sum - rate));
+                            }
+                        }
+
+                        place.setWeights(weights);
+                        reference.document(placeName)
+                                .set(place);
+                    }
+                });
+    }
 }

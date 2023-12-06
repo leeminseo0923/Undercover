@@ -1,6 +1,7 @@
 package univ.soongsil.undercover.fragment;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.room.Room;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
@@ -35,9 +37,23 @@ import com.google.android.gms.location.Priority;
 import java.util.ArrayList;
 import java.util.List;
 
+import univ.soongsil.undercover.R;
+import univ.soongsil.undercover.databinding.DialogRatingBinding;
 import univ.soongsil.undercover.databinding.FragmentRouteBinding;
 import univ.soongsil.undercover.domain.Coordinate;
+import univ.soongsil.undercover.domain.Restaurant;
+import univ.soongsil.undercover.domain.Route;
+import univ.soongsil.undercover.domain.Sight;
 import univ.soongsil.undercover.receiver.GeofenceBroadcastReceiver;
+import univ.soongsil.undercover.repository.AppDatabase;
+import univ.soongsil.undercover.repository.PlaceRepository;
+import univ.soongsil.undercover.repository.RestaurantDao;
+import univ.soongsil.undercover.repository.RestaurantRepositoryImpl;
+import univ.soongsil.undercover.repository.RouteDao;
+import univ.soongsil.undercover.repository.SightDao;
+import univ.soongsil.undercover.repository.SightRepositoryImpl;
+import univ.soongsil.undercover.repository.UserRepository;
+import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +71,10 @@ public class RouteFragment extends Fragment {
     private List<Coordinate> coordinates;
     private List<Geofence> geofenceList;
     private PendingIntent geofencePendingIntent;
+    private AppDatabase database;
+    private PlaceRepository sightRepository;
+    private PlaceRepository restaurantRepository;
+    private UserRepository userRepository;
 
     public class GeofenceResultReceiver extends BroadcastReceiver {
         @Override
@@ -101,6 +121,15 @@ public class RouteFragment extends Fragment {
         return fragment;
     }
 
+    public static RouteFragment newInstance(Route route) {
+        RouteFragment fragment = new RouteFragment();
+        Bundle args = new Bundle();
+        args.putStringArrayList(ARG_HISTORY, new ArrayList<>(route.getNames()));
+        args.putParcelableArrayList(ARG_LOCATION, new ArrayList<>(route.getCoordinates()));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +142,12 @@ public class RouteFragment extends Fragment {
             BroadcastReceiver broadcastReceiver = new GeofenceResultReceiver();
             LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver,
                     new IntentFilter("geofence_result"));
+            database = Room.databaseBuilder(getContext(), AppDatabase.class, "undercover.db").build();
         }
+
+        restaurantRepository = new RestaurantRepositoryImpl();
+        sightRepository = new SightRepositoryImpl();
+        userRepository = new UserRepositoryImpl();
 
         geofenceList = new ArrayList<>();
         for (int i = 0; i < histories.size(); i++) {
@@ -233,6 +267,66 @@ public class RouteFragment extends Fragment {
         binding.bar.setHistories(histories, progress);
 
         binding.tempNext.setOnClickListener(v -> binding.bar.next());
+        binding.doneButton.setOnClickListener(v -> {
+            DialogRatingBinding ratingBinding = DialogRatingBinding.inflate(getLayoutInflater());
+
+            AlertDialog alertDialog = new AlertDialog.Builder(getActivity())
+                    .setView(ratingBinding.getRoot())
+                    .setPositiveButton("저장", (dialog, which) -> {
+                        double rating = ratingBinding.rating.getRating() * 2;
+                        updateWeight(rating);
+                        setDeactivateRoute();
+                        returnToMain();
+                    })
+                    .setNegativeButton("취소", (dialog, which) -> {
+                        setDeactivateRoute();
+                        returnToMain();
+                    }).create();
+            alertDialog.show();
+        });
         return binding.getRoot();
+    }
+
+    private void returnToMain() {
+        getParentFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_frame, new MainPageFragment())
+                .commit();
+    }
+
+    private void setDeactivateRoute() {
+        RouteDao routeDao = database.routeDao();
+        new Thread() {
+            @Override
+            public void run() {
+                routeDao.deActivateAll();
+            }
+        }.start();
+    }
+
+    private void updateWeight(double rating) {
+        SightDao sightDao = database.sightDao();
+        RestaurantDao restaurantDao = database.restaurantDao();
+
+        String uid = userRepository.getCurrentUser().getUid();
+        userRepository.getUser(uid, result -> {
+            List<Boolean> options = result.getOptions();
+            new Thread() {
+                @Override
+                public void run() {
+                    List<Sight> sights = sightDao.getAll();
+                    List<Restaurant> restaurants = restaurantDao.getAll();
+
+                    for (Sight sight: sights)
+                        sightRepository.updateWeight(sight.getName(), options, rating);
+                    for (Restaurant restaurant: restaurants)
+                        restaurantRepository.updateWeight(restaurant.getName(), options, rating);
+
+                    sightDao.deleteAll();
+                    restaurantDao.deleteAll();
+                }
+            }.start();
+
+        });
     }
 }

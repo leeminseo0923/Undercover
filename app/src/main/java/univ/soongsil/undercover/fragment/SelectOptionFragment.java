@@ -79,22 +79,22 @@ public class SelectOptionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView textView1 = (TextView) getActivity().findViewById(R.id.text1);
-        TextView textView2 = (TextView) getActivity().findViewById(R.id.text2);
-        TextView textView3 = (TextView) getActivity().findViewById(R.id.text3);
-        TextView textView4 = (TextView) getActivity().findViewById(R.id.text4);
+        TextView textView1 = getActivity().findViewById(R.id.text1);
+        TextView textView2 = getActivity().findViewById(R.id.text2);
+        TextView textView3 = getActivity().findViewById(R.id.text3);
+        TextView textView4 = getActivity().findViewById(R.id.text4);
 
-        SeekBar seekBar1 = (SeekBar) getActivity().findViewById(R.id.day_seekbar);
-        FrameLayout frameLayout1 = (FrameLayout) getActivity().findViewById(R.id.frame1);
-        TextView seekbar1Text = (TextView) getActivity().findViewById(R.id.seekbar1_text);
+        SeekBar seekBar1 = getActivity().findViewById(R.id.day_seekbar);
+        FrameLayout frameLayout1 = getActivity().findViewById(R.id.frame1);
+        TextView seekbar1Text = getActivity().findViewById(R.id.seekbar1_text);
 
-        SeekBar seekBar2 = (SeekBar) getActivity().findViewById(R.id.money_seekbar);
-        FrameLayout frameLayout2 = (FrameLayout) getActivity().findViewById(R.id.frame2);
-        TextView seekbar2Text = (TextView) getActivity().findViewById(R.id.seekbar2_text);
+        SeekBar seekBar2 = getActivity().findViewById(R.id.money_seekbar);
+        FrameLayout frameLayout2 = getActivity().findViewById(R.id.frame2);
+        TextView seekbar2Text = getActivity().findViewById(R.id.seekbar2_text);
 
-        Button getbutton = (Button) getActivity().findViewById(R.id.get_button);
+        Button getbutton = getActivity().findViewById(R.id.get_button);
 
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spn_SPNList);
+        Spinner spinner = getActivity().findViewById(R.id.spn_SPNList);
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getActivity(), R.array.location_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -180,8 +180,6 @@ public class SelectOptionFragment extends Fragment {
         seekBar2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             Bundle bundle = new Bundle();
-
-            ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

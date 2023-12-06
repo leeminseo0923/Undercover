@@ -99,7 +99,7 @@ public class ReadyDoneFragment extends Fragment {
                             coordinates.add(sight.getLocation());
                         }
 
-                        routeDao.insert(new Route(names, coordinates));
+                        routeDao.insert(new Route(names, coordinates, true));
                         getParentFragmentManager().beginTransaction()
                                 .replace(R.id.main_frame, RouteFragment.newInstance(names, coordinates))
                                 .commit();
