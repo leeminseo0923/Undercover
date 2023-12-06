@@ -3,18 +3,16 @@ package univ.soongsil.undercover;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import univ.soongsil.undercover.databinding.ActivityMainBinding;
 import univ.soongsil.undercover.fragment.MainPageFragment;
@@ -45,23 +43,20 @@ public class MainActivity extends AppCompatActivity {
         // 첫 화면
         getSupportFragmentManager().beginTransaction().add(R.id.main_frame, new MainPageFragment()).commit();
 
-        binding.navbar.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.home) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.friend) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FriendsPageFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.addfriend){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new AddFriendsFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.setting){
-                    getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit();
-                }
-                return true;
+        binding.navbar.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.home) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
             }
+            else if(item.getItemId() == R.id.friend) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FriendsPageFragment()).commit();
+            }
+            else if(item.getItemId() == R.id.addfriend){
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new AddFriendsFragment()).commit();
+            }
+            else if(item.getItemId() == R.id.setting){
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit();
+            }
+            return true;
         });
     }
 
@@ -71,5 +66,21 @@ public class MainActivity extends AppCompatActivity {
         // 다른 곳에서 왔을 때 첫 화면으로 오도록 설정
         binding.navbar.setSelectedItemId(R.id.home);
         getSupportFragmentManager().beginTransaction().add(R.id.main_frame, new MainPageFragment()).commit();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog exitDialog = new AlertDialog.Builder(this)
+                    .setTitle("UNDER COVER")
+                    .setMessage("앱을 종료하시겠습니까?")
+                    .setPositiveButton("네", (dialog, which) -> finish())
+                    .setNegativeButton("아니요", null)
+                    .create();
+
+            exitDialog.show();
+            return true;
+        }
+        return false;
     }
 }
