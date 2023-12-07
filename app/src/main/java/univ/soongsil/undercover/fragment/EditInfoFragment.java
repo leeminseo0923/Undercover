@@ -223,6 +223,7 @@ public class EditInfoFragment extends Fragment {
                                                     if (t.isSuccessful()) {
                                                         Log.d(TAG, "User account deleted.");
                                                         makeToast("UNDER COVER\n계정 탈퇴가 완료되었습니다.");
+                                                        userRepository.deleteUserDocument(user.getUid());
 
                                                         Intent intent = new Intent(getContext(), SplashActivity.class);
                                                         assert getActivity() != null;

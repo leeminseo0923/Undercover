@@ -2,6 +2,12 @@ package univ.soongsil.undercover.repository;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FieldValue;
@@ -78,19 +84,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteAccount() {
-        if (auth.getCurrentUser() != null) {
-            auth.getCurrentUser()
-                    .delete()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d(COLLECTION, "User account deleted.");
-                        }
-                    });
-        }
-    }
-
-    @Override
     public FirebaseUser getCurrentUser() {
         return auth.getCurrentUser();
     }
@@ -103,6 +96,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .addOnSuccessListener(
                         z -> Log.d(COLLECTION, "Success to add document")
                 );
+    }
+
+    @Override
+    public void deleteUserDocument(String uID) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .delete()
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully deleted!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error deleting document", e));
     }
 
     @Override

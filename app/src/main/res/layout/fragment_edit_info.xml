@@ -53,7 +53,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="Name"
             android:inputType="text"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -91,7 +92,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -129,7 +131,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -167,7 +170,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/password_match"

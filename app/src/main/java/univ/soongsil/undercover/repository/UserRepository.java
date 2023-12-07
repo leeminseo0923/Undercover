@@ -11,9 +11,9 @@ public interface UserRepository {
     void register(String email, String password, UpdateUI<FirebaseUser> updateUI);
     void login(String email, String password, UpdateUI<FirebaseUser> updateUI);
     void logout();
-    void deleteAccount();
     FirebaseUser getCurrentUser();
     void setUserDocument(String uID, User user);
+    void deleteUserDocument(String uID);
     void updateUserOptions(String uID, List<Boolean> options);
     void addUserFriend(String uID, String friendUid);
     void deleteUserFriend(String uID, String friendUid);
