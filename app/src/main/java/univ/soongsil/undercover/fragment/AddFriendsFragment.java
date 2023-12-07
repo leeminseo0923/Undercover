@@ -66,6 +66,12 @@ public class AddFriendsFragment extends Fragment {
                             Map<String, Object> data = document.getData();
                             friendRequests = (List<String>) data.get("friendRequests");
 
+                            if (friendRequests.isEmpty()) {
+                                binding.noFriendsList.setVisibility(View.VISIBLE);
+                                return;
+                            }
+                            binding.noFriendsList.setVisibility(View.INVISIBLE);
+
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
                             myAdapter = new MyAdapter(friendRequests);
                             binding.recyclerView.setAdapter(myAdapter);

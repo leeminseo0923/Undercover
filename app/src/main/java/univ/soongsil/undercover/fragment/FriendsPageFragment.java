@@ -60,6 +60,12 @@ public class FriendsPageFragment extends Fragment {
                             Map<String, Object> data = document.getData();
                             friends = (List<String>) data.get("friends");
 
+                            if (friends.isEmpty()) {
+                                binding.noFriendsList.setVisibility(View.VISIBLE);
+                                return;
+                            }
+                            binding.noFriendsList.setVisibility(View.INVISIBLE);
+
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
                             myAdapter = new MyAdapter(friends);
                             binding.recyclerView.setAdapter(myAdapter);
