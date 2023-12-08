@@ -24,4 +24,7 @@ public interface RouteDao {
 
     @Query("UPDATE Route SET isActive = 0 WHERE isActive")
     void deActivateAll();
+
+    @Query("UPDATE Route SET currentProgress = :progress WHERE id= :idx")
+    void updateProgress(Integer progress, Integer idx);
 }
