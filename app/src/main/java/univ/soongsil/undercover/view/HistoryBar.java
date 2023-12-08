@@ -1,6 +1,5 @@
 package univ.soongsil.undercover.view;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -11,10 +10,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.FloatProperty;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -168,6 +165,21 @@ public class HistoryBar extends ProgressBar {
                 mMarkers.add(marker);
             }
         }
+    }
+
+    public String getNextHistory() {
+        if (!isLastHistory())
+            return mHistories.get(mCurrentIndex + 1);
+        else
+            return "";
+    }
+
+    public String getCurrentHistory() {
+        return mHistories.get(mCurrentIndex);
+    }
+
+    public boolean isLastHistory() {
+        return mHistorySize - 1 == mCurrentIndex;
     }
 
     private void setFont(int id) {

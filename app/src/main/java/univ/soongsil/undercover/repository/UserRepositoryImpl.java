@@ -8,8 +8,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -173,5 +176,17 @@ public class UserRepositoryImpl implements UserRepository {
                         Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
                 .addOnFailureListener(e ->
                         Log.w(COLLECTION, "Error updating document", e));
+    }
+    @Override
+    public void getUser(String uID, UpdateUI<User> updateUI) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    User user = documentSnapshot.toObject(User.class);
+                    if (user != null)
+                        updateUI.onSuccess(documentSnapshot.toObject(User.class));
+                })
+                .addOnFailureListener(e -> updateUI.onFail());
     }
 }

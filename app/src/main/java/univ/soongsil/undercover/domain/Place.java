@@ -1,11 +1,15 @@
 package univ.soongsil.undercover.domain;
 
 import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public abstract class Place {
     /**
      * location of the place. <br/>
@@ -13,12 +17,23 @@ public abstract class Place {
      * @see Coordinate
      */
     @NonNull
-    private final Coordinate location;
+    private Coordinate location;
+
+    public void setLocation(@NonNull Coordinate location) {
+        this.location = location;
+    }
+
     /**
      * name of the place
      */
     @NonNull
-    private final String name;
+    @PrimaryKey
+    private String name;
+
+    public void setName(@NonNull String name) {
+        this.name = name;
+    }
+
     /**
      * recommendation weights of the place <br/>
      * Its size is 10
@@ -38,17 +53,52 @@ public abstract class Place {
      */
     private String region;
 
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    @Ignore
+    public Place() {
+        location = new Coordinate(0.0, 0.0);
+        weights = new ArrayList<>();
+        name = "";
+    }
+
     /**
      * @param name a name of the place
      * @param location a coordinates of the place, it have longitude and latitude.
      */
-    public Place(@NonNull String name, @NonNull Coordinate location) {
+    @Ignore
+    public Place(
+            @NonNull String name,
+            @NonNull Coordinate location,
+            @NonNull String region,
+            @NonNull Long minCost,
+            @NonNull Long maxCost) {
         this.name = name;
         this.location = location;
-        weights = new ArrayList<>(10);
+        this.region = region;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.weights = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             weights.add(0.1);
         }
+    }
+
+    public Place(
+            @NonNull String name,
+            @NonNull Coordinate location,
+            @NonNull String region,
+            @NonNull Long minCost,
+            @NonNull Long maxCost,
+            @NonNull List<Double> weights) {
+        this.name = name;
+        this.location = location;
+        this.region = region;
+        this.minCost = minCost;
+        this.maxCost = maxCost;
+        this.weights = weights;
     }
 
     /**
@@ -56,8 +106,9 @@ public abstract class Place {
      * @param longitude a longitude of the place
      * @param latitude a latitude of the place
      */
-    public Place(String name, Double longitude, Double latitude) {
-        this(name, new Coordinate(longitude, latitude));
+    @Ignore
+    public Place(String name, Double longitude, Double latitude, String region, Long minCost, Long maxCost) {
+        this(name, new Coordinate(longitude, latitude), region, minCost, maxCost);
     }
 
     @NonNull
@@ -81,12 +132,8 @@ public abstract class Place {
         this.maxCost = maxCost;
     }
 
-    public Region getRegion() {
-        return Region.valueOf(this.region);
-    }
-
-    public void setRegion(Region region) {
-        this.region = region.name();
+    public String getRegion() {
+        return this.region;
     }
 
     @NonNull

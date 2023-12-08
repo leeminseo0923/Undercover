@@ -1,23 +1,47 @@
 package univ.soongsil.undercover;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.navigation.NavigationBarView;
 
 import univ.soongsil.undercover.databinding.ActivityMainBinding;
-import univ.soongsil.undercover.fragment.MainPageFragment;
-import univ.soongsil.undercover.fragment.FriendsPageFragment;
 import univ.soongsil.undercover.fragment.AddFriendsFragment;
+import univ.soongsil.undercover.fragment.FriendsPageFragment;
+import univ.soongsil.undercover.fragment.MainPageFragment;
 import univ.soongsil.undercover.fragment.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            for (int grantResult :
+                    grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) return;
+            }
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("permission", true);
+            getSupportFragmentManager().setFragmentResult("locale_permission", bundle);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,17 +1,29 @@
 package univ.soongsil.undercover.domain;
 
 import androidx.annotation.NonNull;
+import androidx.room.Ignore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class User {
-    private final String email;
-    private final String name;
-    private final List<String> friends;
+    private String email;
+    private String name;
+    private List<String> friends;
     private List<Boolean> options;
     private List<String> friendRequests;
+
+    @Ignore
+    public User() {
+        email = "";
+        name = "";
+        friends = new ArrayList<>();
+        options = new ArrayList<>();
+        friendRequests = new ArrayList<>();
+    }
+
+    @Ignore
     public User(String name, String email) {
         this.email = email;
         this.name = name;
@@ -24,29 +36,47 @@ public class User {
         return email;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<String> getFriends() {
         return friends;
     }
 
+    public void setFriends(List<String> friends) {
+        this.friends = friends;
+    }
+
     public List<Boolean> getOptions() {
         return options;
+    }
+
+    public void setOptions(List<Boolean> options) {
+        // TODO: 개수는 수정 예정
+        if (options.size() != 5) throw new IllegalArgumentException("option은 5개여야 합니다.");
+        this.options = options;
     }
 
     public List<String> getFriendRequests() {
         return friendRequests;
     }
 
+    public void setFriendRequests(List<String> friendRequests) {
+        this.friendRequests = friendRequests;
+    }
+
     public User addFriendRequest(String uID) {
         friendRequests.add(uID);
         return this;
-    }
-
-    public void setFriendRequests(List<String> friendRequests) {
-        this.friendRequests = friendRequests;
     }
 
     public User addFriend(String uID) {
