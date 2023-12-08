@@ -1,30 +1,42 @@
 package univ.soongsil.undercover;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.navigation.NavigationBarView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import univ.soongsil.undercover.databinding.ActivityMainBinding;
-import univ.soongsil.undercover.fragment.MainPageFragment;
-import univ.soongsil.undercover.fragment.FriendsPageFragment;
 import univ.soongsil.undercover.fragment.AddFriendsFragment;
+import univ.soongsil.undercover.fragment.FriendsPageFragment;
+import univ.soongsil.undercover.fragment.MainPageFragment;
 import univ.soongsil.undercover.fragment.SettingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 1) {
+            for (int grantResult :
+                    grantResults) {
+                if (grantResult == PackageManager.PERMISSION_DENIED) return;
+            }
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("permission", true);
+            getSupportFragmentManager().setFragmentResult("locale_permission", bundle);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,14 +62,11 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.home) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new MainPageFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.friend) {
+                } else if (item.getItemId() == R.id.friend) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new FriendsPageFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.addfriend){
+                } else if (item.getItemId() == R.id.addfriend) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new AddFriendsFragment()).commit();
-                }
-                else if(item.getItemId() == R.id.setting){
+                } else if (item.getItemId() == R.id.setting) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit();
                 }
                 return true;
