@@ -4,16 +4,18 @@ import android.util.Log;
 
 import com.google.firebase.firestore.CollectionReference;
 
+import java.util.List;
+
 import univ.soongsil.undercover.domain.Coordinate;
+import univ.soongsil.undercover.domain.Place;
 import univ.soongsil.undercover.domain.Restaurant;
-import univ.soongsil.undercover.domain.Sight;
 import univ.soongsil.undercover.domain.UpdateUI;
-import univ.soongsil.undercover.domain.User;
 
 public abstract class PlaceRepositoryImpl implements PlaceRepository{
 
     public final String COLLECTION;
-    private final CollectionReference reference;
+    protected final CollectionReference reference;
+    protected final double DELTA = 0.00001;
 
     protected PlaceRepositoryImpl(String collection, CollectionReference reference) {
         this.COLLECTION = collection;
@@ -21,22 +23,13 @@ public abstract class PlaceRepositoryImpl implements PlaceRepository{
     }
 
     @Override
-    public void updateWeight(String placeName, User user, Integer rate) {
+    public abstract void updateWeight(String placeName, List<Boolean> options, Double rate);
 
-    }
-
-    @Override
-    public void addPlace(String placeName, Coordinate coordinate) {
-        Sight sight = new Sight(placeName, coordinate);
-        reference.document(placeName)
-                .set(sight);
-    }
 
     @Override
-    public void addPlace(String placeName, Double longitude, Double latitude) {
-        Restaurant restaurant = new Restaurant(placeName, longitude, latitude);
-        reference.document(placeName)
-                .set(restaurant);
+    public void addPlace(Place place) {
+        reference.document(place.getName())
+                .set(place);
     }
 
     @Override
@@ -54,4 +47,5 @@ public abstract class PlaceRepositoryImpl implements PlaceRepository{
                 })
                 .addOnFailureListener(e -> Log.e(COLLECTION, "Fail to get location in " + placeName + " " + e.getMessage()));
     }
+
 }

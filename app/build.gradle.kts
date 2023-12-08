@@ -72,4 +72,15 @@ dependencies {
     // Declare the dependency for the Cloud Firestore library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation("com.google.firebase:firebase-firestore")
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    implementation("com.google.code.gson:gson:2.9.0")
+
+    // add Google play services location for geofencing
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
 }

@@ -18,4 +18,6 @@ public interface UserRepository {
     void deleteUserFriend(String uID, String friendUid);
     void addUserFriendRequest(String friendUid, String uID);
     void deleteUserFriendRequest(String uID, String friendUid);
+
+    void getUser(String uID, UpdateUI<User> updateUI);
 }
