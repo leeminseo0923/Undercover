@@ -99,6 +99,11 @@ public class User {
         return this;
     }
 
+    public void setOptions(List<Boolean> options) {
+        if (options.size() != 6) throw new IllegalArgumentException("option은 6개여야 합니다.");
+        this.options = options;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
