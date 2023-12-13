@@ -83,6 +83,19 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void deleteAccount() {
+        if (auth.getCurrentUser() != null) {
+            auth.getCurrentUser()
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Log.d(COLLECTION, "User account deleted.");
+                        }
+                    });
+        }
+    }
+
+    @Override
     public FirebaseUser getCurrentUser() {
         return auth.getCurrentUser();
     }
@@ -152,6 +165,16 @@ public class UserRepositoryImpl implements UserRepository {
                         Log.w(COLLECTION, "Error updating document", e));
     }
 
+    @Override
+    public void updateUserName(String uID, String name) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .update("name", name)
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error updating document", e));
+    }
     @Override
     public void getUser(String uID, UpdateUI<User> updateUI) {
         repository.collection(COLLECTION)

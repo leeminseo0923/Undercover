@@ -54,12 +54,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="current password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="current password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/current_password"
@@ -79,12 +92,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="new password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="new password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/new_password"
@@ -104,12 +130,25 @@
         android:orientation="vertical"
         android:paddingHorizontal="50dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:text="confirm password"
-            android:textColor="@color/main_color" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="confirm password"
+                android:textColor="@color/main_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:text="  *"
+                android:textColor="@color/red" />
+        </LinearLayout>
 
         <EditText
             android:id="@+id/confirm_password"
@@ -148,6 +187,23 @@
             android:textColor="@color/white"
             android:textSize="25sp"
             android:textStyle="bold" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/delete_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_bold"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="@string/delete_account"
+            android:textAlignment="textEnd"
+            android:textColor="#AAAAAA"
+            android:textSize="15sp" />
     </LinearLayout>
 
     <Space

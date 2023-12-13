@@ -9,6 +9,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.regex.Pattern;
+
 import univ.soongsil.undercover.databinding.ActivityLoginBinding;
 import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.repository.UserRepository;
@@ -20,6 +22,9 @@ public class LoginActivity extends AppCompatActivity {
     private UserRepository userRepository;
     private long prevBackTime = 0;
 
+    private static final String REGEX_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+    private static final String REGEX_PASSWORD = "^.{8,13}$";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,17 +34,25 @@ public class LoginActivity extends AppCompatActivity {
         userRepository = new UserRepositoryImpl();
 
         binding.loginButton.setOnClickListener(v -> {
-            if (binding.emailEditText.getText().toString().equals("")) {
-                Toast.makeText(LoginActivity.this, "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (binding.passwordEditText.getText().toString().equals("")) {
-                Toast.makeText(LoginActivity.this, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             String email = binding.emailEditText.getText().toString();
             String password = binding.passwordEditText.getText().toString();
+
+            if (email.equals("")) {
+                makeToast("이메일을 입력해주세요.");
+                return;
+            }
+            if (password.equals("")) {
+                makeToast("비밀번호를 입력해주세요.");
+                return;
+            }
+            if (!Pattern.matches(REGEX_EMAIL, email)) {
+                makeToast("이메일 형식이 올바르지 않습니다.");
+                return;
+            }
+            if (!Pattern.matches(REGEX_PASSWORD, password)) {
+                makeToast("비밀번호 형식이 올바르지 않습니다.");
+                return;
+            }
 
             userRepository.login(email, password, new UpdateUI<FirebaseUser>() {
                 @Override
@@ -49,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFail() {
-                    Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                    makeToast("로그인에 실패하였습니다.");
                 }
             });
         });
@@ -82,6 +95,10 @@ public class LoginActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void makeToast(String message) {
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 }
 
