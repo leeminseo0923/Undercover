@@ -21,7 +21,7 @@
     <string name="travel_option">여행 옵션</string>
     <string name="logout_button_string">로그아웃</string>
     <string name="delete_account"><u>탈퇴하기</u></string>
-
+  
     <string name="money_string">%d원</string>
     <string name="day_string">%dDays</string>
 

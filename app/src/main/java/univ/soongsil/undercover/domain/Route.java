@@ -12,11 +12,21 @@ public class Route {
     private boolean isActive;
     private List<String> names;
     private List<Coordinate> coordinates;
+    private Integer currentProgress;
 
     public Route(List<String> names, List<Coordinate> coordinates, boolean isActive) {
         this.names = names;
         this.coordinates = coordinates;
         this.isActive = isActive;
+        this.currentProgress = 0;
+    }
+
+    public Integer getCurrentProgress() {
+        return currentProgress;
+    }
+
+    public void setCurrentProgress(Integer currentProgress) {
+        this.currentProgress = currentProgress;
     }
 
     public boolean isActive() {

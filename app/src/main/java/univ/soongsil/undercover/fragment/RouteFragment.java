@@ -79,7 +79,6 @@ public class RouteFragment extends Fragment {
     public class GeofenceResultReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "get broadcast");
             List<String> names = intent.getStringArrayListExtra("names");
 
             int action = intent.getIntExtra("action", 0);
@@ -91,16 +90,13 @@ public class RouteFragment extends Fragment {
             for (int i = 0; i < names.size(); i++){
                 String name = names.get(i);
 
-                Log.d(TAG, name);
-                Log.d(TAG, binding.bar.getNextHistory());
-                Log.d(TAG, String.valueOf(name.equals(binding.bar.getNextHistory())));
-                Log.d(TAG, String.valueOf(action));
-
                 if (name.equals(binding.bar.getCurrentHistory())
                         && action == Geofence.GEOFENCE_TRANSITION_EXIT) {
+                    Log.d(TAG, "EXIT " + name);
                     binding.label.setText("이동중...");
                 }
                 if (name.equals(binding.bar.getNextHistory()) && action == Geofence.GEOFENCE_TRANSITION_ENTER) {
+                    Log.d(TAG, "ENTER " + name);
                     binding.bar.next();
                     binding.label.setText("목적지에 도착했습니다!");
                 }
@@ -163,6 +159,28 @@ public class RouteFragment extends Fragment {
 
         addGeofence();
 
+    }
+
+    private void resetCurrentProgress() {
+        new Thread(() -> {
+            RouteDao routeDao = database.routeDao();
+
+            Route activity = routeDao.getActivity();
+            binding.bar.setCurrentIndex(activity.getCurrentProgress()-1);
+            binding.bar.next();
+        }).start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        new Thread(() -> {
+            RouteDao routeDao = database.routeDao();
+
+            Route activity = routeDao.getActivity();
+
+            routeDao.updateProgress(binding.bar.getCurrentIndex(), activity.getId());
+        }).start();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -285,6 +303,12 @@ public class RouteFragment extends Fragment {
             alertDialog.show();
         });
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetCurrentProgress();
     }
 
     private void returnToMain() {

@@ -1,6 +1,7 @@
 package univ.soongsil.undercover.fragment;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
@@ -77,6 +80,7 @@ public class EditInfoFragment extends Fragment {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
+
 
         binding.backButton.setOnClickListener(v ->
                 getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit());
@@ -223,6 +227,7 @@ public class EditInfoFragment extends Fragment {
                                                     if (t.isSuccessful()) {
                                                         Log.d(TAG, "User account deleted.");
                                                         makeToast("UNDER COVER\n계정 탈퇴가 완료되었습니다.");
+
                                                         userRepository.deleteUserDocument(user.getUid());
 
                                                         Intent intent = new Intent(getContext(), SplashActivity.class);

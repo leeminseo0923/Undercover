@@ -19,7 +19,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     public static final String TAG = "GEOFENCE";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "event!");
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
 
         if (geofencingEvent == null) {

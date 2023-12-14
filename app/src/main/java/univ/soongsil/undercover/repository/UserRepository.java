@@ -11,6 +11,7 @@ public interface UserRepository {
     void register(String email, String password, UpdateUI<FirebaseUser> updateUI);
     void login(String email, String password, UpdateUI<FirebaseUser> updateUI);
     void logout();
+    void deleteAccount();
     FirebaseUser getCurrentUser();
     void setUserDocument(String uID, User user);
     void deleteUserDocument(String uID);
@@ -20,6 +21,5 @@ public interface UserRepository {
     void addUserFriendRequest(String friendUid, String uID);
     void deleteUserFriendRequest(String uID, String friendUid);
     void updateUserName(String uID, String name);
-
     void getUser(String uID, UpdateUI<User> updateUI);
 }

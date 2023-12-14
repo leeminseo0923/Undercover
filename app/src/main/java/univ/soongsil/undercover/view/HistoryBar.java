@@ -208,6 +208,14 @@ public class HistoryBar extends ProgressBar {
         setIndeterminate(false);
     }
 
+    public int getCurrentIndex() {
+        return mCurrentIndex;
+    }
+
+    public void setCurrentIndex(int id) {
+        mCurrentIndex = id;
+    }
+
     private int spToPx(DisplayMetrics metrics) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, (float) 14, metrics);
     }
