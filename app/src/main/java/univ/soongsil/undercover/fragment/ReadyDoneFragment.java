@@ -15,6 +15,7 @@ import androidx.room.Room;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import univ.soongsil.undercover.R;
@@ -51,11 +52,20 @@ public class ReadyDoneFragment extends Fragment {
         TextView Selected_cost = binding.selectedCost;
 
 
-        //SelectOptionFragment로 부터 지역 데이터와 가겨 데이터를 받아와서 Selected_location, Selected_cost 값을 사용자의 입력에 따라 달라지게 설정
+        //SelectOptionFragment로 부터 지역 데이터와 가격 데이터를 받아와서 Selected_location, Selected_cost 값을 사용자의 입력에 따라 달라지게 설정
         getParentFragmentManager().setFragmentResultListener("지역requestkey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
                 String locationText = bundle.getString("지역");
+                if(locationText=="서울"){
+                    binding.SeoulScroolView.setVisibility(View.VISIBLE);
+                }
+                else if(locationText=="부산"){
+                    binding.BusanScroolView.setVisibility(View.VISIBLE);
+                }
+                else if(locationText=="제주"){
+                    binding.JejuScroolView.setVisibility(View.VISIBLE);
+                }
                 Selected_location.setText(locationText);
             }
         });
@@ -99,7 +109,10 @@ public class ReadyDoneFragment extends Fragment {
                             coordinates.add(sight.getLocation());
                         }
 
-                        routeDao.insert(new Route(names, coordinates, true));
+                        routeDao.insert(new Route(names, coordinates,
+                                Selected_location.getText().toString(),
+                                new Date().toString(),true));
+
                         getParentFragmentManager().beginTransaction()
                                 .replace(R.id.main_frame, RouteFragment.newInstance(names, coordinates))
                                 .commit();
@@ -118,5 +131,22 @@ public class ReadyDoneFragment extends Fragment {
             }
         });
 
+        binding.selectHotel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                binding.readyDone.setVisibility(View.GONE);
+                binding.selectHotel1.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        binding.backbutton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                binding.readyDone.setVisibility(View.VISIBLE);
+                binding.selectHotel1.setVisibility(View.GONE);
+            }
+        });
     }
 }

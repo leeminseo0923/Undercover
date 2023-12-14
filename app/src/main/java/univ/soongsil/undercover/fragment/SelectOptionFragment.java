@@ -111,36 +111,24 @@ public class SelectOptionFragment extends Fragment {
                 ReadyDoneFragment readyDoneFragment = new ReadyDoneFragment();
 
                 if(spinner.getItemAtPosition(position).equals("선택")) {
-                    textView1.setVisibility(View.VISIBLE);
-                    textView2.setVisibility(View.INVISIBLE);
-                    textView3.setVisibility(View.INVISIBLE);
-                    textView4.setVisibility(View.INVISIBLE);
+                    textView1.setText("여행지를\n선택해주세요!");
                 }
                 if(spinner.getItemAtPosition(position).equals("부산")) {
                     region = Region.BUSAN;
                     bundle.putString("지역", "부산");
-                    textView1.setVisibility(View.INVISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                    textView3.setVisibility(View.INVISIBLE);
-                    textView4.setVisibility(View.INVISIBLE);
+                    textView1.setText("여행 일수를\n선택해주세요!");
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
                 else if(spinner.getItemAtPosition(position).equals("서울")) {
                     region = Region.SEOUL;
                     bundle.putString("지역", "서울");
-                    textView1.setVisibility(View.INVISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                    textView3.setVisibility(View.INVISIBLE);
-                    textView4.setVisibility(View.INVISIBLE);
+                    textView1.setText("여행 일수를\n선택해주세요!");
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
                 else if(spinner.getItemAtPosition(position).equals("제주")) {
                     region = Region.JEJU;
                     bundle.putString("지역", "제주");
-                    textView1.setVisibility(View.INVISIBLE);
-                    textView2.setVisibility(View.VISIBLE);
-                    textView3.setVisibility(View.INVISIBLE);
-                    textView4.setVisibility(View.INVISIBLE);
+                    textView1.setText("여행 일수를\n선택해주세요!");
                     frameLayout1.setVisibility(View.VISIBLE);
                 }
 
@@ -169,10 +157,7 @@ public class SelectOptionFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 seekbar1Text.setText(String.format(getString(R.string.day_string), days));
-                textView1.setVisibility(View.INVISIBLE);
-                textView2.setVisibility(View.INVISIBLE);
-                textView3.setVisibility(View.VISIBLE);
-                textView4.setVisibility(View.INVISIBLE);
+                textView1.setText("여행 경비를\n선택해주세요!");
                 frameLayout2.setVisibility(View.VISIBLE);
             }
         });
@@ -199,10 +184,7 @@ public class SelectOptionFragment extends Fragment {
                 bundle.putInt("가격", maxCost);
                 getParentFragmentManager().setFragmentResult("가격requestkey", bundle);
 
-                textView1.setVisibility(View.INVISIBLE);
-                textView2.setVisibility(View.INVISIBLE);
-                textView3.setVisibility(View.INVISIBLE);
-                textView4.setVisibility(View.VISIBLE);
+                textView1.setText("모험을\n떠나시겠습니까?");
                 getbutton.setVisibility(View.VISIBLE);
             }
 
