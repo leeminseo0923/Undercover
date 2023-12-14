@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                 moveTaskToBack(true);
             }
             prevBackTime = System.currentTimeMillis();
+            makeToast("'뒤로'버튼 한번 더 누르시면 종료됩니다.");
             return true;
         }
         return false;

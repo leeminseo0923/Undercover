@@ -32,7 +32,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +57,8 @@
             android:fontFamily="@font/roboto_bold"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textColorHint="#808080" />
+            android:textColorHint="#808080"
+            android:textSize="24sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -73,7 +75,6 @@
             android:layout_gravity="center"
             android:background="@drawable/button_round"
             android:fontFamily="@font/roboto_bold"
-            android:stateListAnimator="@null"
             android:text="@string/login_button_string"
             android:textColor="@color/white"
             android:textSize="25sp"

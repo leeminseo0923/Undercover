@@ -35,7 +35,6 @@ import univ.soongsil.undercover.LoginActivity;
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.SplashActivity;
 import univ.soongsil.undercover.databinding.FragmentEditInfoBinding;
-import univ.soongsil.undercover.domain.UpdateUI;
 import univ.soongsil.undercover.repository.UserRepository;
 import univ.soongsil.undercover.repository.UserRepositoryImpl;
 
@@ -81,6 +80,10 @@ public class EditInfoFragment extends Fragment {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
+
+
+        binding.backButton.setOnClickListener(v ->
+                getParentFragmentManager().beginTransaction().replace(R.id.main_frame, new SettingFragment()).commit());
 
         binding.newPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -224,6 +227,8 @@ public class EditInfoFragment extends Fragment {
                                                     if (t.isSuccessful()) {
                                                         Log.d(TAG, "User account deleted.");
                                                         makeToast("UNDER COVER\n계정 탈퇴가 완료되었습니다.");
+
+                                                        userRepository.deleteUserDocument(user.getUid());
 
                                                         Intent intent = new Intent(getContext(), SplashActivity.class);
                                                         assert getActivity() != null;

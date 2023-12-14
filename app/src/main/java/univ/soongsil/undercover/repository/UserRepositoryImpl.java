@@ -4,6 +4,10 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -108,6 +112,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .addOnSuccessListener(
                         z -> Log.d(COLLECTION, "Success to add document")
                 );
+    }
+
+    @Override
+    public void deleteUserDocument(String uID) {
+        repository.collection(COLLECTION)
+                .document(uID)
+                .delete()
+                .addOnSuccessListener(aVoid ->
+                        Log.d(COLLECTION, "DocumentSnapshot successfully deleted!"))
+                .addOnFailureListener(e ->
+                        Log.w(COLLECTION, "Error deleting document", e));
     }
 
     @Override

@@ -1,8 +1,6 @@
 package univ.soongsil.undercover.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.List;
 import java.util.Map;
 
-import univ.soongsil.undercover.databinding.AddFriendsItemBinding;
 import univ.soongsil.undercover.databinding.FragmentFriendsPageBinding;
 import univ.soongsil.undercover.databinding.FriendsPageItemBinding;
 import univ.soongsil.undercover.repository.UserRepository;
@@ -62,6 +59,12 @@ public class FriendsPageFragment extends Fragment {
 
                             Map<String, Object> data = document.getData();
                             friends = (List<String>) data.get("friends");
+
+                            if (friends.isEmpty()) {
+                                binding.noFriendsList.setVisibility(View.VISIBLE);
+                                return;
+                            }
+                            binding.noFriendsList.setVisibility(View.INVISIBLE);
 
                             binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
                             myAdapter = new MyAdapter(friends);
