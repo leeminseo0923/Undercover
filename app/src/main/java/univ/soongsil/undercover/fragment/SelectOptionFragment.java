@@ -201,7 +201,7 @@ public class SelectOptionFragment extends Fragment {
 
                         restaurantRepository.getBestPlaces(region,
                                 options,maxCost,
-                                days * 3,
+                                days * 3 + 3,
                                 result -> new Thread() {
                                     @Override
                                     public void run() {
@@ -220,7 +220,7 @@ public class SelectOptionFragment extends Fragment {
                                 region,
                                 options,
                                 maxCost,
-                                days * 3,
+                                days * 3 + 3,
                                 result -> new Thread() {
                                     @Override
                                     public void run() {
