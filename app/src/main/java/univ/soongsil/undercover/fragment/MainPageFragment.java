@@ -10,6 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import univ.soongsil.undercover.R;
 import univ.soongsil.undercover.databinding.ActivityMainPageBinding;
 import univ.soongsil.undercover.domain.Route;
@@ -61,10 +65,26 @@ public class MainPageFragment extends Fragment {
         });
 
         binding.beforetravel.setOnClickListener(
-                v -> getParentFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.main_frame, new BeforeTravelFragment())
-                        .commit());
+                v -> {
+
+
+                    database = Room.databaseBuilder(
+                                    getContext(),
+                                    AppDatabase.class,
+                                    "undercover.db")
+                            .build();
+                    new Thread(() -> {
+                        RouteDao routeDao = database.routeDao();
+                        ArrayList<Route> routes = new ArrayList<>(routeDao.getAll());
+
+                        getParentFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.main_frame,
+                                        PreviousTravelFragment.newInstance(routes))
+                                .commit();
+                    }).start();
+
+                });
 
 
     }

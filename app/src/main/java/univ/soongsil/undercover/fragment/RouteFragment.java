@@ -178,7 +178,7 @@ public class RouteFragment extends Fragment {
             RouteDao routeDao = database.routeDao();
 
             Route activity = routeDao.getActivity();
-
+            if (activity == null) return;
             routeDao.updateProgress(binding.bar.getCurrentIndex(), activity.getId());
         }).start();
     }

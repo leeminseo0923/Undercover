@@ -60,12 +60,6 @@ public class User {
         return options;
     }
 
-    public void setOptions(List<Boolean> options) {
-        // TODO: 개수는 수정 예정
-        if (options.size() != 5) throw new IllegalArgumentException("option은 5개여야 합니다.");
-        this.options = options;
-    }
-
     public List<String> getFriendRequests() {
         return friendRequests;
     }
