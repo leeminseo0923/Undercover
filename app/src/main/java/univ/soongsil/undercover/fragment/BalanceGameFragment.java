@@ -65,6 +65,7 @@ public class BalanceGameFragment extends Fragment {
         binding.choiceDownImage.setImageResource(imageDown.getResourceId(count, 0));
 
         binding.choiceUpImage.setOnClickListener(v -> {
+            setButtonClickable(false);
             startAnimations(CHOICE_UP);
 
             travelOptions.add(true);
@@ -89,6 +90,7 @@ public class BalanceGameFragment extends Fragment {
         });
 
         binding.choiceDownImage.setOnClickListener(v -> {
+            setButtonClickable(false);
             startAnimations(CHOICE_DOWN);
 
             travelOptions.add(false);
@@ -112,6 +114,12 @@ public class BalanceGameFragment extends Fragment {
             }, 1000);
         });
     }
+
+    public void setButtonClickable(boolean clickable) {
+        binding.choiceUpImage.setClickable(clickable);
+        binding.choiceDownImage.setClickable(clickable);
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -155,6 +163,21 @@ public class BalanceGameFragment extends Fragment {
 
         // 나머지 선택지 fade out
         Animation fadeOutAnim = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.anim_fade_out);
+        fadeOutAnim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                setButtonClickable(true);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         if (chosenOption.equals(CHOICE_UP)) {
             binding.choiceDown.startAnimation(fadeOutAnim);
         } else {

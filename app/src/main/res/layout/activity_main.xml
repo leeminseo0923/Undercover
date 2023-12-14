@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-
+        android:background="#EFEFEF"
         app:labelVisibilityMode="unlabeled"
         app:itemIconTint="@drawable/menu_selector_color"
         app:itemTextColor="@drawable/menu_selector_color"
